@@ -62,5 +62,5 @@ int useRobot(PLAYER * p);
 
 
 
-void blocked(PLAYER *cur_p, int blocked_pos);
+int blocked(PLAYER *cur_p, int blocked_pos);
 void bombed(PLAYER *cur_p);
