@@ -413,7 +413,7 @@ int useBomb(PLAYER * p, int dis) {
     int ret = FAIL;
     if (p->BombNum <= 0) {
         printf("您没有炸弹！\n");
-    } else if (dis < 10 || dis > 10) {
+    } else if (dis < -10 || dis > 10) {
         printf("炸弹使用距离为10米以内！\n");
     } else {
         game.map[p->CurPos + dis].ItemType = BOMB;
@@ -428,7 +428,7 @@ int useBlock(PLAYER * p, int dis) {
     int ret = FAIL;
     if (p->BlockNum <= 0) {
         printf("您没有路障！\n");
-    } else if (dis < 10 || dis > 10) {
+    } else if (dis < -10 || dis > 10) {
         printf("路障使用距离为10米以内！\n");
     } else {
         game.map[p->CurPos + dis].ItemType = BLOCK;
