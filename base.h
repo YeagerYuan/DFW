@@ -45,6 +45,10 @@ typedef struct LOCATION_{
  *每个地图块的结构体定义
  */
 
+/*
+ *每个地图块的结构体定义
+ */
+
 typedef struct MAPBLOCK_
 {
     int HouseOwnerId;    // 房产主人Id
@@ -54,8 +58,14 @@ typedef struct MAPBLOCK_
     int MapValue;        // 当前地块价值
     ITEMTYPE ItemType;       // 道具类型
     int PlayerId;        // 站在当前位置的玩家，如果没有玩家就是-1
+    int rentAmount;      // 租金金额
+    int minePoint;       // 矿地点数
 } MAPBLOCK;
 
+
+/*
+ *每个玩家的结构体定义
+ */
 /*
  *每个玩家的结构体定义
  */
@@ -64,7 +74,7 @@ typedef struct PLAYER_
     int PlayerId;         // 用户ID
     char *Name;           // 用户名称
     int CurPos;           // 当前位置
-    int LastPos;          // 上一轮的位置
+    int MovingDis;        // 移动的距离
     LOCATION *HouseId;         // 名下房产位置
     int BombNum;          // 炸弹数量
     int RobotNum;         // 机器娃娃数量
@@ -72,6 +82,7 @@ typedef struct PLAYER_
     int SleepTime;        // 跳过轮数
     int Money;            // 可移动资产
     int Point;            // 点数
+    int dead;             // 是否死亡：0否，1是
     struct PLAYER_ *next; // 下一个玩家
     // 固定资产待定
 } PLAYER;

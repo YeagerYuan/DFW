@@ -45,7 +45,9 @@ int action(int sig, PLAYER * p, int n);
 
 int roll();
 void _step(int dis, PLAYER * p);
+void _syncPlayerPos(PLAYER *cur_p);
 void _playerChangePos(PLAYER* p, int pos);
+void playerPosToMap(PLAYER * cur_p);
 void printStatus(PLAYER * cur_p);
 void buyEmptyBlock(PLAYER *cur_p);
 void upOwnBlock(PLAYER *cur_p);
@@ -56,11 +58,16 @@ void timer(long sleep_time, int sig);
 
 
 // item usage
+int _canUseBomb(int pos);
 int useBomb(PLAYER * p, int dis);
+int _canUseBlock(int pos);
 int useBlock(PLAYER * p, int dis);
 int useRobot(PLAYER * p);
 
+void payRent(PLAYER* from, PLAYER* to, int amount);
+void enterMagicHouse(PLAYER* p);
+void enterPropHouse(PLAYER* p);
 
 
 int blocked(PLAYER *cur_p, int blocked_pos);
-void bombed(PLAYER *cur_p);
+void bombed(PLAYER *cur_p, int bombed_pos);

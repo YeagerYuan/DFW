@@ -7,11 +7,10 @@
 
 // 前进路上的道具状态
 #define ENCOUNTERED 1  // 表示有某个道具
-#define NONE 2         // 表示没有道具
-
+#define NONE_ITEM 2
 
 int afterActionJudge(PLAYER *cur_p);
-int onSiteActionJudge(PLAYER *cur_p);
+void onSiteActionJudge(cur_p, judge_sig);
 
 
 MOVING_ENCOUNTERED * passedLandStatusSync(PLAYER *p);

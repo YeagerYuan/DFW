@@ -17,8 +17,9 @@ void initGame()
     fp = fopen("./Map.txt", "r");
     char c;
     int cnt = 0;
+    int minePoints[6] = {60, 80, 40, 100, 80, 20};
     char buffer[BUF_SIZE];
-    fgets(buffer, BUF_SIZE, fp);
+    // fgets(buffer, BUF_SIZE, fp);
     char tmp[2];
     tmp[1] = '\0';
     strcpy(buffer, "0111111111111151111111111111211111131111111111111611111111111114777777");
@@ -37,6 +38,9 @@ void initGame()
             } else {
 				game.map[cnt].MapValue = 300;
             }
+        }
+        else if (type == MINERALFILED){
+            game.map[cnt].minePoint = minePoints[cnt - 64];
         }
         cnt++;
     }
@@ -94,21 +98,21 @@ void choosePlayer(GAME *game1)
     char *trashCan;
     while (1)
     {
-        printf("Input player number(2-4): ");
+        printf("选择玩家数量：(2-4): ");
         // 非数字字符
         if (!scanf("%d", &playerNum))
         {
-            printf("Please input number!\n");
+            printf("请输入数字!\n");
         }
         // 人数过多
         else if (playerNum > 4)
         {
-            printf("Too many players, please between 2 to 4!\n");
+            printf("输入玩家数量过多，请输入 2 到 4 的数字!\n");
         }
         // 人数过少
         else if (playerNum < 2)
         {
-            printf("The number of player is too small, please between 2 to 4!\n");
+            printf("输入玩家数量过少，请输入 2 到 4 的数字!\n");
         }
         else
         {
@@ -131,11 +135,11 @@ void choosePlayer(GAME *game1)
         int len = strlen(playerList);
         if (len < playerNum)
         {
-            printf("Too little input!\n");
+            printf("输入位数太少!\n");
         }
         else if (len > playerNum)
         {
-            printf("Too many input!\n");
+            printf("输入位数过多!\n");
         }
         else
         {
@@ -147,11 +151,11 @@ void choosePlayer(GAME *game1)
             }
             else if (result == 2)
             {
-                printf("Do not repeat!\n");
+                printf("不能重复选择同一个角色!\n");
             }
             else
             {
-                printf("invalid role!\n");
+                printf("没有该角色编号!\n");
             }
         }
         clearFlush(stdin);
@@ -167,11 +171,12 @@ void choosePlayer(GAME *game1)
         player->Name = playerNameList[playerId];
         player->CurPos = 0;
         player->HouseId = NULL;
-        player->BlockNum = 0;
-        player->RobotNum = 0;
-        player->BombNum = 0;
+        player->BlockNum = 1;
+        player->RobotNum = 1;
+        player->BombNum = 1;
         player->SleepTime = 0;
         player->Point = 0;
+        player->MovingDis = 0;
         player->Money = INITIALMONEY;
         player->next = NULL;
         if (!i)
@@ -190,13 +195,18 @@ void choosePlayer(GAME *game1)
     game.player = firstPlayer;
     game.current_player = firstPlayer;
     game.play_num = playerNum;
+    clearFlush(stdin);
 }
 
 int action(int sig, PLAYER * p, int action_pos) {
     if(sig == ROLL) {
         int i = roll();
         _step(i, p);
-        printf("do roll ! You get num: %d,  now you are on pos: %d\n", i, p->CurPos);
+        printf("掷骰子！你得到了数字:");
+        _RED
+        printf("%d", i);
+        _WHITE
+        printf("你当前的位置是: %d\n", p->CurPos);
         return ROLL;
     }
     else if(sig == BLOCK) {
@@ -224,7 +234,7 @@ int action(int sig, PLAYER * p, int action_pos) {
         return QUIT;
     }
     else if(sig == STEP) {
-        printf("do step\n");
+        _step(action_pos, p);
         return STEP;
     }
     else if(sig == ERROR) {
@@ -253,8 +263,8 @@ int roll() {
     return rand() % 6 + 1;
 }
 
-void playerChangePos(PLAYER * p, int pos) {
-    p->LastPos = p->CurPos;
+void _playerChangePos(PLAYER * p, int pos) {
+    p->MovingDis = pos;
     p->CurPos+=pos;
     p->CurPos = p->CurPos % MAPSIZE;
 }
@@ -264,6 +274,14 @@ void exitGame() {
 }
 
 void _step(int dis, PLAYER * cur_p) {
+    if (dis < 0) {
+        printf("移动距离不能小于0！当前移动距离：%d\n", dis);
+        exit(-1);
+    }
+	_playerChangePos(cur_p, dis);
+}
+
+void _syncPlayerPos(PLAYER *cur_p) {
     int i=0;
     PLAYER * cur = cur_p->next;
         // TODO:多个玩家在一起，原来位置PLayerId不是-1
@@ -280,14 +298,26 @@ void _step(int dis, PLAYER * cur_p) {
         else {
             game.map[cur_p->CurPos].PlayerId = cur->PlayerId;
         }
-        _playerChangePos(cur_p, dis);
-
-    game.map[cur_p->CurPos].PlayerId = cur_p->PlayerId;
-
 }
-void _playerChangePos(PLAYER * p, int pos) {
-    p->CurPos+=pos;
-    p->CurPos = p->CurPos % MAPSIZE;
+
+void playerPosToMap(PLAYER * cur_p) {
+        int i = 0;
+        PLAYER *cur = cur_p;
+        // cur_p的lastPOs才是需要擦除的部分，其余的玩家都是CurPos需要擦除
+        game.map[cur_p->CurPos - cur_p->MovingDis].PlayerId = -1;
+        cur = cur->next;
+        while(cur != cur_p) {
+            game.map[cur->CurPos].PlayerId = -1;
+            cur = cur->next;
+        }
+
+        // cur_p重新赋值的部分是CurPos，和其他玩家一致
+        cur = cur_p;
+        for(i=0;i<game.play_num;i++) {
+            game.map[cur->CurPos].PlayerId = cur->PlayerId;
+            cur = cur->next;
+        }
+
 }
 
 /*
@@ -302,23 +332,24 @@ void  buyEmptyBlock(PLAYER *cur_p){
     char ch;
 
     if (currentBlock->HouseType != LAND){//该地皮不是空地，不能购买
-        printf("The block is not land,you can not buy it!\n");
+        printf("当前所在地块不是可购买地块!\n");
         return;
     }
 
     if (currentBlock->HouseOwnerId != -1){//该空地已经被别人拥有，不能购买
-        printf("The land is owned by you or others,you can not buy it!\n");
+        printf("该地块已经被其他人购买!\n");
         return;
     }
 
     if (currentCost > cur_p->Money){//现金不够，不能购买
-        printf("You don\'t have enough money,you can not buy it!\n");
+        printf("身上钱不够，不能购买地块!\n");
         return;
     }
 
     //购买完成，更新状态
     currentBlock->HouseOwnerId = cur_p->PlayerId;
     currentBlock->HouseLevel++;
+    currentBlock->rentAmount = currentCost*2;
     //currentBlock.house_flag;/*******************************************************************待定*/
     cur_p->Money -= currentCost;
     //把该空地加入该玩家名下房产
@@ -340,17 +371,17 @@ void upOwnBlock(PLAYER *cur_p){
     char ch;
 
     if (currentBlock->HouseType != LAND){//该地皮不是空地，不能升级
-        printf("The block is not land,you can not up it!\n");
+        printf("当前所在地块不是可升级地块!\n");
         return;
     }
 
     if (currentBlock->HouseOwnerId != cur_p->PlayerId){//不是自己的地皮，不能购买
-        printf("The land is not owned by you,you can not up it!\n");
+        printf("当前所在地块不属于你！无法升级\n");
         return;
     }
 
     if (currentCost > cur_p->Money){//现金不够，不能升级
-        printf("You don\'t have enough money,you can not up it!\n");
+        printf("身上钱不足以升级所在地块\n");
         return;
     }
     /*按照一般大富翁的逻辑购买完成后不能立即升级,但是*************************************************待定*/
@@ -363,6 +394,7 @@ void upOwnBlock(PLAYER *cur_p){
     //currentBlock.house_flag;/*******************************************************************待定*/
     if(currentBlock->HouseLevel < 3) {
         currentBlock->HouseLevel++;
+        currentBlock->rentAmount += currentCost*2;
         cur_p->Money -= currentCost;
     }
     else {
@@ -409,17 +441,30 @@ void sellOwnBlock(PLAYER *cur_p,int num){
 }
 
 
+int _canUseBomb(int pos) {
+    MAPBLOCK block = game.map[pos];
+    return block.PlayerId == -1 && !(block.HouseType == HOSPITAL || block.HouseType == JAIL) && block.ItemType == NONE;
+}
+
+int _canUseBlock(int pos) {
+    MAPBLOCK block = game.map[pos];
+    return block.PlayerId == -1 && !(block.HouseType == HOSPITAL || block.HouseType == JAIL) && block.ItemType == NONE;
+}
+
 int useBomb(PLAYER * p, int dis) {
     int ret = FAIL;
     if (p->BombNum <= 0) {
         printf("您没有炸弹！\n");
-    } else if (dis < 10 || dis > 10) {
+    } else if (dis < -10 || dis > 10) {
         printf("炸弹使用距离为10米以内！\n");
-    } else {
+    } else if (_canUseBomb((p->CurPos + dis + MAPSIZE) % MAPSIZE)){
         game.map[p->CurPos + dis].ItemType = BOMB;
         p->BombNum--;
         printf("使用炸弹成功！\n");
         ret = SUCCESS;
+    }
+    else {
+        printf("当前位置不能放置炸弹！\n");
     }
     return ret;
 }
@@ -428,13 +473,16 @@ int useBlock(PLAYER * p, int dis) {
     int ret = FAIL;
     if (p->BlockNum <= 0) {
         printf("您没有路障！\n");
-    } else if (dis < 10 || dis > 10) {
+    } else if (dis < -10 || dis > 10) {
         printf("路障使用距离为10米以内！\n");
-    } else {
+    } else if (_canUseBlock((p->CurPos + dis+ MAPSIZE) % MAPSIZE)){
         game.map[p->CurPos + dis].ItemType = BLOCK;
         p->BlockNum--;
         printf("使用路障成功！\n");
         ret = SUCCESS;
+    }
+    else {
+        printf("当前位置不能放置路障！\n");
     }
     return ret;
 }
@@ -471,5 +519,17 @@ void timer(long sleep_time, int sig) {
     }
 }
 
+void payRent(PLAYER* from, PLAYER* to, int amount) {
+    from->Money -= amount;
+    to->Money += amount;
+}
+
+void enterMagicHouse(PLAYER* p) {
+    printf("魔法屋未开放，敬请期待！\n");
+}
+
+void enterPropHouse(PLAYER* p) {
+    printf("道具屋！！！\n");
+}
 
 
