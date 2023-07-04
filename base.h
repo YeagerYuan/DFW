@@ -1,6 +1,27 @@
 #ifndef BASE_H
 #define BASE_H
+
+// 地图大小
 #define MAPSIZE 70
+
+
+#define FAIL -1
+#define SUCCESS 0
+
+typedef enum ITEMTYPE_ {
+    NONE,
+    BOMB,
+    BLOCK,
+    ROBOT,
+}ITEMTYPE;
+
+
+typedef struct MOVING_ENCOUNTERED_ {
+    int been_bombed;
+    int been_blocked;
+    int blocked_pos;
+    int bombed_pos;
+}MOVING_ENCOUNTERED;
 
 typedef enum HOUSETYPE_
 {
@@ -31,7 +52,7 @@ typedef struct MAPBLOCK_
     int HouseLevel;      // 房屋等级
     HOUSETYPE HouseType; // 房屋类型
     int MapValue;        // 当前地块价值
-    int BlockType;       // 道具类型
+    ITEMTYPE ItemType;       // 道具类型
     int PlayerId;        // 站在当前位置的玩家，如果没有玩家就是-1
 } MAPBLOCK;
 
@@ -43,6 +64,7 @@ typedef struct PLAYER_
     int PlayerId;         // 用户ID
     char *Name;           // 用户名称
     int CurPos;           // 当前位置
+    int LastPos;          // 上一轮的位置
     LOCATION *HouseId;         // 名下房产位置
     int BombNum;          // 炸弹数量
     int RobotNum;         // 机器娃娃数量

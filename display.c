@@ -140,7 +140,15 @@ void printLine(int y) {
 
 void printHelp() {
     _YELLOW
-    printf("Roll for step---Quit for next player\n");
+    printf("Command:\n");
+    printf("Roll -- You can move 1~6 steps and after that you cannot use other commands\n");
+    printf("Sell n -- You can sell the land you own for twice the price, n is the location of your land\n");
+    printf("Block n -- You can place a block anywhere 10 steps before or after your current position,any passing player will be blocked.n is the relative position, and n is forward when it is positive\n");
+    printf("Bomb n --You can place a block anywhere 10 steps before or after your current position,any passing player will be bombed and sent to the hospital for 3 turns.n is the relative position, and n is forward when it is positive\n");
+    printf("Robot --You can use robot to clear the block or bomb anywhere 10 steps before or after your current position\n");
+    printf("Query -- Get your current asset situation\n");
+    printf("Help --See how to use other commands\n");
+    printf("Quit --Quit the game\n");
     _WHITE
 }
 

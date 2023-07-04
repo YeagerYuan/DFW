@@ -5,12 +5,13 @@
 #include "display.h"
 
 extern GAME game;
-int getInput(){
+
+int getInput(int *num){
     char inputString[BUF_SIZE] = {'\0'};
     char command[BUF_SIZE / 2] = {'\0'};
     char number[BUF_SIZE / 2] = {'\0'};
     int i = 0,j = 0;
-    int num = 0;
+    //int num = 0;
     char *ptr;
 
     _getString(inputString);
@@ -29,27 +30,27 @@ int getInput(){
         number[j] = inputString[i];
         i++,j++;
     }
-    num = (int)strtol(number,&ptr, 0);
+    *num = (int)strtol(number,&ptr, 0);
 
     if(!strcmp(command,"ROLL") && number[0]=='\0'){
         return ROLL;
     }
-    else if(!strcmp(command,"SELL") && number[0]=='\0'){
+    else if(!strcmp(command,"SELL")){
         return SELL;
     }
     else if(!strcmp(command,"BLOCK")){
-        if(num>10 || num<-10){
+        if(*num>10 || *num<-10 || *num==0){
             return ERROR;
         }
         else if(*ptr != '\0'){//数字后面有其他输入的情况
             return -1;
         }
         else{//输入正确 调用相关函数
-        printf("block\n");
+        return BLOCK;
         }
     }
     else if(!strcmp(command,"BOMB")){
-        if(num>10 || num<-10){
+        if(*num>10 || *num<-10 || *num==0){
             return -1;
         }
         else if(*ptr != '\0'){//数字后面有其他输入的情况
@@ -68,11 +69,17 @@ int getInput(){
     else if(!strcmp(command,"HELP") && number[0]=='\0'){
         return HELP;
     }
+    else if(!strcmp(command,"BUY") && number[0]=='\0'){
+        return BUY;
+    }
+    else if(!strcmp(command,"UP") && number[0]=='\0'){
+        return UP;
+    }
     else if(!strcmp(command,"QUIT") && number[0]=='\0'){
         return QUIT;
     }
     else if(!strcmp(command,"STEP")){
-        if(num>6 || num<1){
+        if(*num>6 || *num<1){
             return -1;
         }
         else if(*ptr != '\0'){//数字后面有其他输入的情况

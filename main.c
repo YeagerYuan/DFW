@@ -14,6 +14,7 @@ int main()
     int player_sig = 0;
     int action_sig = 0;
     int judge_sig = 0;
+    int action_pos = -1;
     _COLOR_INIT
     printMap(game);
     cur_p = game.player;
@@ -26,11 +27,8 @@ int main()
         _CUR_INPUT
         _GREEN printf("Now it is your turn! Now the action player is %d\n", cur_p->PlayerId);_WHITE
         while(1) {
-
-            judge(cur_p);
-
             // 单个玩家的输入循环
-            player_sig = getInput();
+            player_sig = getInput(&action_pos);
             if(player_sig == ERROR) {
                 printf("input wrong command, please reinput.\n");
                 continue;
@@ -41,13 +39,18 @@ int main()
                 break;
             }
             else {
-                action_sig = action(player_sig, cur_p);
+                action_sig = action(player_sig, cur_p, action_pos);
                 if(action_sig == ROLL) {
+                    timer(2, ONCLOCK);
                     break;
                 }
             }
             //本次循环退出也就意味着要重新刷新屏幕并给到下一个人进行输入循环
         }
+        judge_sig = afterActionJudge();
+
+        onSiteActionJudge();
+
         cur_p = cur_p->next;
     }
 }
