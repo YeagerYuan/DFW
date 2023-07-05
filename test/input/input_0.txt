@@ -1,15 +1,11 @@
-set player AQJ
-set money A 10000
-set money Q 30000
-set money J 50000
 10000
+12
+set pos Q 1
+set pos A 5
 set item A 1 10
-set item Q 2 7
-set buff A 3
-set map 15 Q 2
-set map 16 A 1
-set bomb 41
-set unmap 15
-set stop A 6
-set loc A 41
+set point Q 222
+set money A 20000
+set map 5 A 2
+set bomb 13
 dump
+quit
