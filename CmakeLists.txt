@@ -1,0 +1,19 @@
+cmake_minimum_required(VERSION 3.5)
+project(rich)
+
+set(CMAKE_CXX_STANDARD 11)
+
+set(SOURCE_FILES
+    base.h
+    display.h
+    display.c
+    input.h
+    input.c
+    judge.h
+    main.c
+    play.h
+    play.c
+    stat_judge.c
+    )
+
+add_executable(rich ${SOURCE_FILES})
