@@ -174,7 +174,7 @@ void choosePlayer(GAME *game1)
         player->RobotNum = 1;
         player->BombNum = 1;
         player->SleepTime = 0;
-        player->Point = 0;
+        player->Point = 100;
         player->MovingDis = 0;
         player->dead = 0;
         player->Money = INITIALMONEY;
@@ -581,23 +581,23 @@ void enterItemShop(PLAYER *cur_p) {
             if(cur_p->BlockNum + cur_p->BombNum + cur_p->RobotNum < 10) {
                 if(item_num == 1) {
                     if(cur_p->Point >= BLOCK_POINTS) {
-                        printf("你购买了一个路障，花费 %d 点数\n", BLOCK_POINTS);
                         cur_p->BlockNum++;
                         cur_p->Point-=BLOCK_POINTS;
+                        printf("你购买了一个路障，花费 %d 点数，现在还有 %d 个点数\n", BLOCK_POINTS, cur_p->Point);
                     }
                 }
                 else if(item_num == 2) {
                     if(cur_p->Point >= BLOCK_POINTS) {
-                        printf("你购买了一个机器娃娃，花费 %d 点数\n", ROBOT_POINTS);
                         cur_p->RobotNum++;
                         cur_p->Point-=ROBOT_POINTS;
+                        printf("你购买了一个机器娃娃，花费 %d 点数，现在还有%d个点数\n", ROBOT_POINTS, cur_p->Point);
                     }
                 }
-                else if(item_num == 2) {
+                else if(item_num == 3) {
                     if(cur_p->Point >= BLOCK_POINTS) {
-                        printf("你购买了一个炸弹，花费 %d 点数\n", BOMB_POINTS);
                         cur_p->BombNum++;
                         cur_p->Point-=BOMB_POINTS;
+                        printf("你购买了一个炸弹，花费 %d 点数, 现在还有 %d个点数\n", BOMB_POINTS, cur_p->Point);
                     }
                 }
                 else {
@@ -631,14 +631,17 @@ void enterGiftShop(PLAYER *cur_p) {
     else if(gift_num == 1) {
         // 奖金
         cur_p->Money += GIFTMONEY;
+        printf("选择奖金，获得 %d 元，现在你有 %d 元\n", GIFTMONEY, cur_p->Money);
     }
     else if(gift_num == 2) {
         // 点数卡
         cur_p->Point += GIFTPOINT;
+        printf("选择点数卡，获得 %d 点数，现在你有 %d 点数\n", GIFTPOINT, cur_p->Point);
     }
     else if(gift_num == 3) {
         // 财神
         cur_p->BuffTime = GIFTCSROUND + 1;
+        printf("选择财神时间，共 %d 轮\n", GIFTCSROUND);
     }
     else {
         // 异常返回

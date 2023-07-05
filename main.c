@@ -41,9 +41,9 @@ int main()
         }
 
         _GREEN printf("现在是你的回合! 当前动作的玩家是：%s\n", cur_p->Name);_WHITE
-        
+
         while(1) {
-            
+
             // 单个玩家的输入循环
             player_sig = getInput(&action_pos);
             if(player_sig == ERROR) {
@@ -52,13 +52,14 @@ int main()
             }
             else {
                 action_sig = action(player_sig, cur_p, action_pos);
-                if(action_sig == ROLL) {
+                if(action_sig == ROLL || action_sig == STEP) {
                     timer(1, NOCLOCK);
                     break;
                 }
             }
             //本次循环退出也就意味着要重新刷新屏幕并给到下一个人进行输入循环
         }
+        // TODO:step不要受到途中道具的影响
         judge_sig = afterActionJudge(cur_p);
 
         onSiteActionJudge(cur_p, judge_sig);
@@ -76,7 +77,7 @@ int ContinueGame() {
     {
         if (p->dead) {
             aliveNum--;
-        } 
+        }
         p = p->next;
     }
     return aliveNum != 1;

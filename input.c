@@ -81,7 +81,7 @@ int getInput(int *num){
         return QUIT;
     }
     else if(!strcmp(command,"STEP")){
-        if(*num>6 || *num<1){
+        if(*num>MAPSIZE || *num<0){
             return -1;
         }
         else if(*ptr != '\0'){//数字后面有其他输入的情况
@@ -140,13 +140,13 @@ int getNumberInput_1() {
             continue;
         }
         else {
-            if(input_buf[0] < 48 || input_buf[0] > 57 || input_buf[0] != 70) {
-                printf("请输入数字 0--9 或 F !\n");
+            if((input_buf[0] < 48 && input_buf[0] > 57) && input_buf[0] != 70) {
+                printf("请输入数字 0--9 或 F !  %d \n", input_buf[0] - '0');
                 continue;
             }
             else {
                 if(input_buf[0] >= 48 && input_buf[0] <= 57) {
-                    num = input_buf[0] - '1';
+                    num = input_buf[0] - '0';
                     break;
                 }
                 else if(input_buf[0] == 70) {
@@ -170,8 +170,8 @@ int getNumberInput_1_123() {
             return -1;
         }
         else {
-            if(input_buf[0] < 48 || input_buf[0] > 57 || input_buf[0] != 70) {
-                printf("放弃机会！\n");
+            if((input_buf[0] < 48 && input_buf[0] > 57) && input_buf[0] != 70) {
+                printf("没有对应的礼物，放弃机会！\n");
                 return -1;
             }
             else {
