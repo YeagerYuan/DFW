@@ -1,0 +1,18 @@
+user AJ
+A
+money 10000
+point 0
+item1 0
+item2 0
+item3 0
+stop 0
+userloc 0
+J
+money 10000
+point 0
+item1 0
+item2 0
+item3 0
+stop 0
+userloc 0
+nextuser A

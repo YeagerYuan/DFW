@@ -140,13 +140,13 @@ int getNumberInput_1() {
             continue;
         }
         else {
-            if((input_buf[0] < 48 && input_buf[0] > 57) && input_buf[0] != 70) {
-                printf("请输入数字 0--9 或 F !  %d \n", input_buf[0] - '0');
+            if(input_buf[0] < 48 || input_buf[0] > 57 || input_buf[0] != 70) {
+                printf("请输入数字 0--9 或 F !\n");
                 continue;
             }
             else {
                 if(input_buf[0] >= 48 && input_buf[0] <= 57) {
-                    num = input_buf[0] - '0';
+                    num = input_buf[0] - '1';
                     break;
                 }
                 else if(input_buf[0] == 70) {
@@ -170,13 +170,13 @@ int getNumberInput_1_123() {
             return -1;
         }
         else {
-            if((input_buf[0] < 48 && input_buf[0] > 57) && input_buf[0] != 70) {
-                printf("没有对应的礼物，放弃机会！\n");
+            if(input_buf[0] < 48 || input_buf[0] > 57 || input_buf[0] != 70) {
+                printf("放弃机会！\n");
                 return -1;
             }
             else {
                 if(input_buf[0] >= 49 && input_buf[0] <= 51) {
-                    num = input_buf[0] - '1';
+                    num = input_buf[0] - '0';
                     break;
                 }
             }

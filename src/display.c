@@ -19,7 +19,7 @@ char Color[8][10] = {
     "\033[34m",
     "\033[35m",
     "\033[36m",
-    "\033[37m" };
+    "\033[37m"};
 
 void printOfColor(char *str, COLOR color)
 {
@@ -55,32 +55,38 @@ void printMap(GAME Game)
     printf("\033[1B\033[29D");
 }
 
-
 void _printBlock(MAPBLOCK block)
 {
     char levelBuf[2];
     levelBuf[1] = '\0';
-    if (block.PlayerId != -1) {
+    if (block.PlayerId != -1)
+    {
         switch (block.PlayerId)
         {
         case 0:
-             printOfColor("Q", RED);
-             break;
+            printOfColor("Q", RED);
+            break;
         case 1:
-             printOfColor("A", GREEN);
-             break;
+            printOfColor("A", GREEN);
+            break;
         case 2:
-             printOfColor("S", BLUE);
-             break;
+            printOfColor("S", BLUE);
+            break;
         case 3:
-             printOfColor("J", YELLOW);
-             break;
+            printOfColor("J", YELLOW);
+            break;
         }
-    } else if(block.ItemType == BOMb){
+    }
+    else if (block.ItemType == BOMb)
+    {
         printOfColor("@", RED);
-    }else if(block.ItemType == BLOCk){
+    }
+    else if (block.ItemType == BLOCk)
+    {
         printOfColor("#", RED);
-    }else{
+    }
+    else
+    {
         switch (block.HouseType)
         {
         case STPOINT:
@@ -132,18 +138,21 @@ void _printBlock(MAPBLOCK block)
     }
 }
 
-void printLine(int y) {
+void printLine(int y)
+{
     _CUR_MOVE(0, y);
     _CUR_CLEAR
-    int i=0;
+    int i = 0;
     _SOFT_BLUE_BG
-    for(i=0;i<120;i++) {
+    for (i = 0; i < 120; i++)
+    {
         printf(" ");
     }
     _BLACK_BG
 }
 
-void printHelp() {
+void printHelp()
+{
     _YELLOW
     printf("Command:\n");
     printf("Roll -- You can move 1~6 steps and after that you cannot use other commands\n");
@@ -157,7 +166,8 @@ void printHelp() {
     _WHITE
 }
 
-void printStatus(PLAYER * cur_p) {
+void printStatus(PLAYER *cur_p)
+{
     char names[4][10] = {"Q", "A", "S", "J"};
     _YELLOW
     printf("Player %d--%s     Robot---BLOCK---BOMB---MONEY---POINT\n", cur_p->PlayerId, names[cur_p->PlayerId]);

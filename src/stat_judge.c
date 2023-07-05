@@ -24,21 +24,22 @@ MOVING_ENCOUNTERED * passedLandStatusSync(PLAYER *cur_p) {
     }
     for(i = cur_p->MovingDis;i>=0;i--) {
         // 遍历将会走过的所有位置
-        if(game.map[pos_now - i].ItemType == BOMb) {
-            printf("在%d号地块被炸\n", pos_now - i);
+        int iter_cur = (pos_now - i) % MAPSIZE;
+        if(game.map[iter_cur].ItemType == BOMb) {
+            printf("在%d号地块被炸\n", iter_cur);
             timer(2, ONCLOCK);
             info->been_bombed = ENCOUNTERED;
             info->been_blocked = NONE_ITEM;
-            info->bombed_pos = pos_now - i;
+            info->bombed_pos = (pos_now - i) % MAPSIZE;
             // 当已经检测到炸弹时，退出，不继续检测
             break;
         }
-        else if(game.map[pos_now - i].ItemType == BLOCk) {
-            printf("在%d号地块被路障挡住\n", pos_now - i);
+        else if(game.map[iter_cur].ItemType == BLOCk) {
+            printf("在%d号地块被路障挡住\n", iter_cur);
             timer(2, ONCLOCK);
             info->been_blocked = ENCOUNTERED;
             info->been_bombed = NONE_ITEM;
-            info->blocked_pos = pos_now - i;
+            info->blocked_pos = iter_cur;
             break;
         }
         else {
@@ -56,12 +57,12 @@ int afterActionJudge(PLAYER *cur_p) {
     if(moving->been_blocked == ENCOUNTERED) {
         blocked(cur_p, moving->blocked_pos);
         free(moving);
-        return BLOCKED;
+        return BOMBED;
     }
     else if(moving->been_bombed == ENCOUNTERED) {
         bombed(cur_p, moving->bombed_pos);
         free(moving);
-        return BOMBED;
+        return BLOCKED;
     }
     else {
         return OK;

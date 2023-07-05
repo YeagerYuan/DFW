@@ -35,12 +35,10 @@
 // 初始化资金定义（待修改）
 #define INITIALMONEY 10000
 
-
 // 道具点数价格
 #define BOMB_POINTS 50
 #define BLOCK_POINTS 50
 #define ROBOT_POINTS 30
-
 
 // 礼品屋选择
 #define GIFTMONEY 2000
@@ -48,35 +46,39 @@
 #define GIFTCSROUND 5
 
 void initGame();
+void initMap();
 void chooseInitialFund();
+void setInitialPoint(int playerNumber, int pointNum);
+void setInitialFund(int playerNumner, int moneyNum);
+void setInitialItem(int playerNumber, int item, int itemNum);
+void setInitialBuff(int playerNumber, int buffTime);
 void choosePlayer();
 void exitGame();
 int inputJudeg(char *string, int length);
 
-int action(int sig, PLAYER * p, int n);
+int action(int sig, PLAYER *p, int n);
 
 int roll();
-void _step(int dis, PLAYER * p);
+void _step(int dis, PLAYER *p);
 void _syncPlayerPos(PLAYER *cur_p);
-void _playerChangePos(PLAYER* p, int pos);
-void playerPosToMap(PLAYER * cur_p);
-void printStatus(PLAYER * cur_p);
-void  buyEmptyBlock(PLAYER *cur_p);
+void _playerChangePos(PLAYER *p, int pos);
+void playerPosToMap(PLAYER *cur_p);
+void printStatus(PLAYER *cur_p);
+void buyEmptyBlock(PLAYER *cur_p);
 void upOwnBlock(PLAYER *cur_p);
 void sellOwnBlock(PLAYER *cur_p, int num);
 
 // time related
 void timer(long sleep_time, int sig);
 
-
 // item usage
 int _canUseBomb(int pos);
-int useBomb(PLAYER * p, int dis);
+int useBomb(PLAYER *p, int dis);
 int _canUseBlock(int pos);
-int useBlock(PLAYER * p, int dis);
-int useRobot(PLAYER * p);
+int useBlock(PLAYER *p, int dis);
+int useRobot(PLAYER *p);
 
-void payRent(PLAYER* from, PLAYER* to, int amount);
+void payRent(PLAYER *from, PLAYER *to, int amount);
 
 void enterItemShop(PLAYER *p);
 void enterMagicHouse(PLAYER *p);
@@ -84,3 +86,12 @@ void enterGiftShop(PLAYER *cur_p);
 
 int blocked(PLAYER *cur_p, int blocked_pos);
 void bombed(PLAYER *cur_p, int bombed_pos);
+
+// 测试函数
+void _buyEmptyBlock_(int playerNumber, int num, int level); // 该函数用来实现测试中的set map功能
+void _upOwnBlock_(PLAYER *cur_p, int num, int level);
+void _sellOwnBlock_(int num); // 该函数用来实现测试中的set unmap功能
+void _setSleepTime_(PLAYER *pPlayer, int n);
+int _useBomb_(int loc);
+int _useBlock_(int loc);
+void setUserLoc(char Name, int loc);

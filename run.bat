@@ -1,3 +1,4 @@
+cd .\src
 rd .\build
 md .\build
 cd .\build

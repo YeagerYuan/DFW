@@ -1,0 +1,35 @@
+user AQJ
+A
+alive 1
+money 10000
+point 0
+item1 10
+item2 1
+item3 1
+buff 3
+stop 6
+userloc 0
+Q
+alive 1
+money 30000
+point 0
+item1 1
+item2 7
+item3 1
+buff 0
+stop 0
+userloc 0
+J
+alive 1
+money 50000
+point 0
+item1 1
+item2 1
+item3 1
+buff 0
+stop 0
+userloc 0
+MAP
+map 16 A 1
+item 41 3
+nextuser A

@@ -12,6 +12,8 @@
 #define _CUR_DOWN printf("\033[%dB", 1);fflush(stdout);
 #define _CUR_UP printf("\033[nA");fflush(stdout);
 #define _CUR_SPAWN _CUR_MOVE(0, 0);
+#define _CUR_SAVE_POS printf("\033[s");fflush(stdout);
+#define _CUR_REFORM_POS printf("\033[u");fflush(stdout);
 
 // 文字颜色相关
 #define _GREEN printf("\033[32m");fflush(stdout);

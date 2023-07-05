@@ -1,0 +1,159 @@
+user SA
+S
+money 0
+point 0
+item1 0
+item2 0
+item3 0
+stop 0
+userloc 0
+A
+money 0
+point 0
+item1 0
+item2 0
+item3 0
+stop 0
+userloc 0
+MAP
+mapuser 0 Q
+mapuser 1 Q
+mapuser 2 Q
+mapuser 3 Q
+mapuser 4 Q
+mapuser 5 Q
+mapuser 6 Q
+mapuser 7 Q
+mapuser 8 Q
+mapuser 9 Q
+mapuser 10 Q
+mapuser 11 Q
+mapuser 12 Q
+mapuser 13 Q
+mapuser 14 Q
+mapuser 15 Q
+mapuser 16 Q
+mapuser 17 Q
+mapuser 18 Q
+mapuser 19 Q
+mapuser 20 Q
+mapuser 21 Q
+mapuser 22 Q
+mapuser 23 Q
+mapuser 24 Q
+mapuser 25 Q
+mapuser 26 Q
+mapuser 27 Q
+mapuser 28 Q
+mapuser 29 Q
+mapuser 30 Q
+mapuser 31 Q
+mapuser 32 Q
+mapuser 33 Q
+mapuser 34 Q
+mapuser 35 Q
+mapuser 36 Q
+mapuser 37 Q
+mapuser 38 Q
+mapuser 39 Q
+mapuser 40 Q
+mapuser 41 Q
+mapuser 42 Q
+mapuser 43 Q
+mapuser 44 Q
+mapuser 45 Q
+mapuser 46 Q
+mapuser 47 Q
+mapuser 48 Q
+mapuser 49 Q
+mapuser 50 Q
+mapuser 51 Q
+mapuser 52 Q
+mapuser 53 Q
+mapuser 54 Q
+mapuser 55 Q
+mapuser 56 Q
+mapuser 57 Q
+mapuser 58 Q
+mapuser 59 Q
+mapuser 60 Q
+mapuser 61 Q
+mapuser 62 Q
+mapuser 63 Q
+mapuser 64 Q
+mapuser 65 Q
+mapuser 66 Q
+mapuser 67 Q
+mapuser 68 Q
+mapuser 69 Q
+map 0 Q 0
+map 1 Q 0
+map 2 Q 0
+map 3 Q 0
+map 4 Q 0
+map 5 Q 0
+map 6 Q 0
+map 7 Q 0
+map 8 Q 0
+map 9 Q 0
+map 10 Q 0
+map 11 Q 0
+map 12 Q 0
+map 13 Q 0
+map 14 Q 0
+map 15 Q 0
+map 16 Q 0
+map 17 Q 0
+map 18 Q 0
+map 19 Q 0
+map 20 Q 0
+map 21 Q 0
+map 22 Q 0
+map 23 Q 0
+map 24 Q 0
+map 25 Q 0
+map 26 Q 0
+map 27 Q 0
+map 28 Q 0
+map 29 Q 0
+map 30 Q 0
+map 31 Q 0
+map 32 Q 0
+map 33 Q 0
+map 34 Q 0
+map 35 Q 0
+map 36 Q 0
+map 37 Q 0
+map 38 Q 0
+map 39 Q 0
+map 40 Q 0
+map 41 Q 0
+map 42 Q 0
+map 43 Q 0
+map 44 Q 0
+map 45 Q 0
+map 46 Q 0
+map 47 Q 0
+map 48 Q 0
+map 49 Q 0
+map 50 Q 0
+map 51 Q 0
+map 52 Q 0
+map 53 Q 0
+map 54 Q 0
+map 55 Q 0
+map 56 Q 0
+map 57 Q 0
+map 58 Q 0
+map 59 Q 0
+map 60 Q 0
+map 61 Q 0
+map 62 Q 0
+map 63 Q 0
+map 64 Q 0
+map 65 Q 0
+map 66 Q 0
+map 67 Q 0
+map 68 Q 0
+map 69 Q 0
+nextuser S
