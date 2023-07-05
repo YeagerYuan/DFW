@@ -24,7 +24,7 @@ MOVING_ENCOUNTERED * passedLandStatusSync(PLAYER *cur_p) {
     }
     for(i = cur_p->MovingDis;i>=0;i--) {
         // 遍历将会走过的所有位置
-        if(game.map[pos_now - i].ItemType == BOMB) {
+        if(game.map[pos_now - i].ItemType == BOMb) {
             printf("在%d号地块被炸\n", pos_now - i);
             timer(2, ONCLOCK);
             info->been_bombed = ENCOUNTERED;
@@ -33,7 +33,7 @@ MOVING_ENCOUNTERED * passedLandStatusSync(PLAYER *cur_p) {
             // 当已经检测到炸弹时，退出，不继续检测
             break;
         }
-        else if(game.map[pos_now - i].ItemType == BLOCK) {
+        else if(game.map[pos_now - i].ItemType == BLOCk) {
             printf("在%d号地块被路障挡住\n", pos_now - i);
             timer(2, ONCLOCK);
             info->been_blocked = ENCOUNTERED;
@@ -69,10 +69,12 @@ int afterActionJudge(PLAYER *cur_p) {
 }
 
 void onSiteActionJudge(PLAYER *cur_p, int judgeSig) {
+    if(cur_p->BuffTime > 0) {
+        cur_p->BuffTime--;
+    }
     if (judgeSig != OK) {
         return;
     }
-
     MAPBLOCK block = game.map[cur_p->CurPos];
     switch (game.map[cur_p->CurPos].HouseType) {
     case LAND:
@@ -80,25 +82,38 @@ void onSiteActionJudge(PLAYER *cur_p, int judgeSig) {
             buyEmptyBlock(cur_p);
         } else if (block.HouseOwnerId != cur_p->PlayerId)
         {
-            PLAYER* owner = cur_p;
-            while (owner->PlayerId != block.HouseOwnerId)
-            {
-                owner = owner->next;
+            if (cur_p->BuffTime > 0) {
+                printf("财神附体，免交租金！\n");
+            } else {
+                PLAYER* owner = cur_p;
+                while (owner->PlayerId != block.HouseOwnerId)
+                {
+                    owner = owner->next;
+                }
+                if (cur_p->Money < block.rentAmount) {
+                    printf("您没有足够现金，您已出局！\n");
+                } else {
+                    payRent(cur_p, owner, block.rentAmount);
+                    printf("当前地块主人为%s，您交付租金%d元.\n", owner->Name, block.rentAmount);
+                }
             }
-            payRent(cur_p, owner, block.rentAmount);
-            printf("当前地块主人为%s，您交付租金%d元.\n", block.rentAmount);
-            // TODO: 判定破产
         }
+        break;
     case HOSPITAL:
+        break;
     case STPOINT:
         break;
     case MAGICHOUSE:
         enterMagicHouse(cur_p);
         break;
     case PROPHOUSE:
+        enterItemShop(cur_p);
         break;
-        enterMagicHouse(cur_p);
+    case GIFTHOUSE:
+        enterGiftShop(cur_p);
+        break;
     case JAIL:
+        printf("您进入监狱，将被跳过两轮！\n");
         cur_p->SleepTime = 2;
         break;
     case MINERALFILED:
@@ -106,13 +121,14 @@ void onSiteActionJudge(PLAYER *cur_p, int judgeSig) {
         printf("获取点数：%d\n", block.minePoint);
         break;
     }
+    timer(1, ONCLOCK);
 }
 
 void bombed(PLAYER *cur_p, int bombed_pos) {
     cur_p->SleepTime = BOMBED_SLEEP_ROUND;
     game.map[cur_p->CurPos].PlayerId = -1;
     cur_p->CurPos = HOSPITAL_POS;
-    game.map[bombed_pos].ItemType = NONE;
+    game.map[bombed_pos].ItemType = NONe;
     // TODO
     // 当玩家被送到医院时，是否显示该玩家的图标？
     return;
@@ -121,6 +137,6 @@ void bombed(PLAYER *cur_p, int bombed_pos) {
 int blocked(PLAYER *cur_p, int blocked_pos) {
     cur_p->CurPos = blocked_pos;
     game.map[cur_p->CurPos].PlayerId = -1;
-    game.map[blocked_pos].ItemType = NONE;
+    game.map[blocked_pos].ItemType = NONe;
 }
 

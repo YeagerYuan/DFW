@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
-#include "input.h";
+#include <stdlib.h>
+#include "input.h"
 #include "play.h"
 #include "display.h"
 
@@ -126,6 +127,7 @@ void cleanCommandWindow() {
     _CUR_SPAWN
 }
 
+/*更改为道具屋的购买输入函数*/
 int getNumberInput_1() {
     int num=0;
     char input_buf[BUF_SIZE];
@@ -133,18 +135,53 @@ int getNumberInput_1() {
         memset(input_buf, 0, BUF_SIZE * sizeof(char));
         gets(input_buf);
         if(strlen(input_buf) != 1) {
-            printf("input too long!please reinput.\n");
+            printf("请输入单个数字或字母！\n");
             continue;
         }
         else {
-            if(input_buf[0] < 48 || input_buf[0] > 57) {
-                printf("input must be 0--9, please reinput!\n");
+            if(input_buf[0] < 48 || input_buf[0] > 57 || input_buf[0] != 70) {
+                printf("请输入数字 0--9 或 F !\n");
                 continue;
             }
-            num = input_buf[0] - '1';
-            break;
+            else {
+                if(input_buf[0] >= 48 && input_buf[0] <= 57) {
+                    num = input_buf[0] - '1';
+                    break;
+                }
+                else if(input_buf[0] == 70) {
+                    num=70; // 表示F
+                    break;
+                }
+            }
         }
     }
+    return num;
+}
+
+int getNumberInput_1_123() {
+    int num=0;
+    char input_buf[BUF_SIZE];
+    while(1) {
+        memset(input_buf, 0, BUF_SIZE * sizeof(char));
+        gets(input_buf);
+        if(strlen(input_buf) != 1) {
+            printf("放弃机会！\n");
+            return -1;
+        }
+        else {
+            if(input_buf[0] < 48 || input_buf[0] > 57 || input_buf[0] != 70) {
+                printf("放弃机会！\n");
+                return -1;
+            }
+            else {
+                if(input_buf[0] >= 49 && input_buf[0] <= 51) {
+                    num = input_buf[0] - '1';
+                    break;
+                }
+            }
+        }
+    }
+    return num;
 }
 
 void getSelectedNumChar(int num) {

@@ -9,10 +9,10 @@
 #define SUCCESS 0
 
 typedef enum ITEMTYPE_ {
-    NONE,
-    BOMB,
-    BLOCK,
-    ROBOT,
+    NONe,
+    BOMb,
+    BLOCk,
+    ROBOt,
 }ITEMTYPE;
 
 
@@ -83,6 +83,7 @@ typedef struct PLAYER_
     int Money;            // 可移动资产
     int Point;            // 点数
     int dead;             // 是否死亡：0否，1是
+    int BuffTime;
     struct PLAYER_ *next; // 下一个玩家
     // 固定资产待定
 } PLAYER;

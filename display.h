@@ -1,6 +1,8 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 #include "base.h"
+#include <stdlib.h>
+
 
 // 光标相关
 #define _COLOR_INIT system("cls");

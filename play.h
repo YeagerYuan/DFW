@@ -35,6 +35,18 @@
 // 初始化资金定义（待修改）
 #define INITIALMONEY 10000
 
+
+// 道具点数价格
+#define BOMB_POINTS 50
+#define BLOCK_POINTS 50
+#define ROBOT_POINTS 30
+
+
+// 礼品屋选择
+#define GIFTMONEY 2000
+#define GIFTPOINT 200
+#define GIFTCSROUND 5
+
 void initGame();
 void chooseInitialFund();
 void choosePlayer();
@@ -49,7 +61,7 @@ void _syncPlayerPos(PLAYER *cur_p);
 void _playerChangePos(PLAYER* p, int pos);
 void playerPosToMap(PLAYER * cur_p);
 void printStatus(PLAYER * cur_p);
-void buyEmptyBlock(PLAYER *cur_p);
+void  buyEmptyBlock(PLAYER *cur_p);
 void upOwnBlock(PLAYER *cur_p);
 void sellOwnBlock(PLAYER *cur_p, int num);
 
@@ -65,9 +77,10 @@ int useBlock(PLAYER * p, int dis);
 int useRobot(PLAYER * p);
 
 void payRent(PLAYER* from, PLAYER* to, int amount);
-void enterMagicHouse(PLAYER* p);
-void enterPropHouse(PLAYER* p);
 
+void enterItemShop(PLAYER *p);
+void enterMagicHouse(PLAYER *p);
+void enterGiftShop(PLAYER *cur_p);
 
 int blocked(PLAYER *cur_p, int blocked_pos);
 void bombed(PLAYER *cur_p, int bombed_pos);

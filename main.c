@@ -3,6 +3,7 @@
 #include "base.h"
 #include "play.h"
 #include "input.h"
+#include "judge.h"
 
 GAME game;
 int main()
@@ -49,7 +50,7 @@ int main()
             else {
                 action_sig = action(player_sig, cur_p, action_pos);
                 if(action_sig == ROLL) {
-                    timer(2, ONCLOCK);
+                    timer(1, ONCLOCK);
                     break;
                 }
             }
@@ -57,7 +58,7 @@ int main()
         }
         judge_sig = afterActionJudge(cur_p);
 
-        onSiteActionJudge();
+        onSiteActionJudge(cur_p, judge_sig);
 
         playerPosToMap(cur_p);
 

@@ -1,5 +1,6 @@
 #include "display.h"
 #include "base.h"
+#include <string.h>
 #include <stdio.h>
 #define LEFTMARGIN 30 // 地图左margin
 #define PRINTMARGIN(x)         \
@@ -75,11 +76,15 @@ void _printBlock(MAPBLOCK block)
              printOfColor("J", YELLOW);
              break;
         }
-    } else {
+    } else if(block.ItemType == BOMb){
+        printOfColor("@", RED);
+    }else if(block.ItemType == BLOCk){
+        printOfColor("#", RED);
+    }else{
         switch (block.HouseType)
         {
         case STPOINT:
-            printf("S");
+            printOfColor("S", PURPLE);
             break;
         case LAND:
             switch (block.HouseOwnerId)
@@ -106,7 +111,7 @@ void _printBlock(MAPBLOCK block)
             }
             break;
         case PROPHOUSE:
-            printOfColor("T", SKYBLUE);
+            printOfColor("T", PURPLE);
             break;
         case GIFTHOUSE:
             printOfColor("G", PURPLE);
@@ -115,13 +120,13 @@ void _printBlock(MAPBLOCK block)
             printOfColor("M", PURPLE);
             break;
         case HOSPITAL:
-            printf("H");
+            printOfColor("H", PURPLE);
             break;
         case JAIL:
-            printf("P");
+            printOfColor("P", PURPLE);
             break;
         case MINERALFILED:
-            printf("$");
+            printOfColor("$", YELLOW);
             break;
         }
     }

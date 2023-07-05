@@ -9,3 +9,4 @@ char* _getString(char* inputString);
 int getInput(int* num);
 void cleanCommandWindow();
 int getNumberInput_1();
+int getNumberInput_1_123();
