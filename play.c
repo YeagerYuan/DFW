@@ -252,6 +252,7 @@ int action(int sig, PLAYER * p, int action_pos) {
     }
     else if(sig == SELL) {
         sellOwnBlock(p, action_pos);
+        printMap(game);
         return SELL;
     }
     else {
@@ -261,6 +262,7 @@ int action(int sig, PLAYER * p, int action_pos) {
 }
 
 int roll() {
+    srand((unsigned int)time(0));
     return rand() % 6 + 1;
 }
 
@@ -430,7 +432,7 @@ void sellOwnBlock(PLAYER *cur_p,int num){
         printf("You input a wrong number,please reinput\n");
         return;
     }
-    MAPBLOCK *blockToSell = &game.map[num];
+    MAPBLOCK *blockToSell = &(game.map[num]);
     if (blockToSell->HouseType != LAND){//该地皮不是空地，不能出售
         printf("The block is not land,you can not sell it!\n");
         return;
@@ -439,7 +441,7 @@ void sellOwnBlock(PLAYER *cur_p,int num){
         printf("The land is not owned by you,you can not sell it!\n");
         return;
     }
-
+    printf("出售成功！\n");
     //出售完成，更新状态
     cur_p->Money += blockToSell->MapValue * (blockToSell->HouseLevel) * 2;
     blockToSell->HouseOwnerId = -1;     //房屋ID恢复为初始ID

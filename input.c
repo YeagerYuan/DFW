@@ -8,6 +8,7 @@
 extern GAME game;
 
 int getInput(int *num){
+    printf("输入命令>>>");
     char inputString[BUF_SIZE] = {'\0'};
     char command[BUF_SIZE / 2] = {'\0'};
     char number[BUF_SIZE / 2] = {'\0'};

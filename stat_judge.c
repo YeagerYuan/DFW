@@ -72,7 +72,7 @@ void onSiteActionJudge(PLAYER *cur_p, int judgeSig) {
     if(cur_p->BuffTime > 0) {
         cur_p->BuffTime--;
     }
-    if (judgeSig != OK) {
+    if (judgeSig == BOMBED) {
         return;
     }
     MAPBLOCK block = game.map[cur_p->CurPos];
@@ -127,6 +127,7 @@ void onSiteActionJudge(PLAYER *cur_p, int judgeSig) {
 void bombed(PLAYER *cur_p, int bombed_pos) {
     cur_p->SleepTime = BOMBED_SLEEP_ROUND;
     game.map[cur_p->CurPos].PlayerId = -1;
+    game.map[cur_p->CurPos - cur_p->MovingDis].PlayerId = -1;
     cur_p->CurPos = HOSPITAL_POS;
     game.map[bombed_pos].ItemType = NONe;
     // TODO
@@ -135,8 +136,9 @@ void bombed(PLAYER *cur_p, int bombed_pos) {
 }
 
 int blocked(PLAYER *cur_p, int blocked_pos) {
-    cur_p->CurPos = blocked_pos;
     game.map[cur_p->CurPos].PlayerId = -1;
+    cur_p->MovingDis = (blocked_pos - (cur_p->CurPos - cur_p->MovingDis + MAPSIZE) % MAPSIZE + MAPSIZE) % MAPSIZE;
+    cur_p->CurPos = blocked_pos;
     game.map[blocked_pos].ItemType = NONe;
 }
 

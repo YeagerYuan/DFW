@@ -6,6 +6,8 @@
 #include "judge.h"
 
 GAME game;
+
+int ContinueGame();
 int main()
 {
     _COLOR_INIT
@@ -19,7 +21,7 @@ int main()
     printMap(game);
     cur_p = game.player;
     fflush(stdout);
-    while(1) {
+    while(ContinueGame()) {
         // 整个游戏过程循环
         cleanCommandWindow();
         printMap(game);
@@ -39,8 +41,9 @@ int main()
         }
 
         _GREEN printf("现在是你的回合! 当前动作的玩家是：%s\n", cur_p->Name);_WHITE
+        
         while(1) {
-
+            
             // 单个玩家的输入循环
             player_sig = getInput(&action_pos);
             if(player_sig == ERROR) {
@@ -50,7 +53,7 @@ int main()
             else {
                 action_sig = action(player_sig, cur_p, action_pos);
                 if(action_sig == ROLL) {
-                    timer(1, ONCLOCK);
+                    timer(1, NOCLOCK);
                     break;
                 }
             }
@@ -66,5 +69,16 @@ int main()
     }
 }
 
-
+int ContinueGame() {
+    int aliveNum = game.play_num;
+    PLAYER * p = game.player->next;
+    while (p != game.player)
+    {
+        if (p->dead) {
+            aliveNum--;
+        } 
+        p = p->next;
+    }
+    return aliveNum != 1;
+}
 
