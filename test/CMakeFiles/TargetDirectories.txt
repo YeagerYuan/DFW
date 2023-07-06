@@ -1,3 +1,0 @@
-C:/Users/Trace/Desktop/DFW/test/CMakeFiles/test.dir
-C:/Users/Trace/Desktop/DFW/test/CMakeFiles/edit_cache.dir
-C:/Users/Trace/Desktop/DFW/test/CMakeFiles/rebuild_cache.dir

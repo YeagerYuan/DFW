@@ -1,4 +1,4 @@
 cd .\test
-py .\test.py
+python .\test.py
 cd ..
 pause

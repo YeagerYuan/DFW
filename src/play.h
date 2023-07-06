@@ -95,3 +95,4 @@ void _setSleepTime_(PLAYER *pPlayer, int n);
 int _useBomb_(int loc);
 int _useBlock_(int loc);
 void setUserLoc(char Name, int loc);
+void _choosePlayer_(char *playerList);

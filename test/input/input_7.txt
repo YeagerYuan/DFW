@@ -1,0 +1,11 @@
+10090
+13
+set pos S 8
+set pos Q 16
+step 2
+set item Q 1 10
+set point S 222
+set money Q 20000
+stop S 20
+dump
+quit

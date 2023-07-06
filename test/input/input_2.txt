@@ -1,0 +1,11 @@
+10000
+23
+set pos A 18
+set pos S 51
+step 2
+set item A 1 10
+set point S 222
+set money A 20000
+set map 13 A 1
+dump
+quit

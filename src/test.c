@@ -29,37 +29,40 @@ void inputGame(int j)
 
         if(num != 0)
         {
-            for (int i = 0;i < 4; i++)  initMoney = num;
+            initMoney = num;
             fgets(command, MAX_LENGTH, file);
 
-            char *pbuf = command;
-            int _player_nums = strlen(command);
-            _player_nums--;
-            FILE *buf_txt = freopen("buf.txt", "w", stdout);
-            printf("%d ", _player_nums);
-            while(*pbuf != '\0')      // get nums of players
-            {
-                if(*pbuf == '1')    printf("1");
-                else if(*pbuf == '2')   printf("2");
-                else if(*pbuf == '3')   printf("3");
-                else if(*pbuf == '4')   printf("4");
-                // else    printf("%c", *pbuf);
-                pbuf++;
-            }
-            fclose(buf_txt);
-
-            // // output into dump after origin info
-            // FILE* buf_txt_dump = freopen("dump/dump_0.txt", "a", stdout);   
-            // read from buftxt
-            buf_txt = freopen("buf.txt", "r",stdin);
-            char test[10];
-
-            // unit test
             initMap();
-            choosePlayer();
+            _choosePlayer_(command);
 
-            fclose(buf_txt);
-            // fclose(buf_txt_dump);
+            // char *pbuf = command;
+            // int _player_nums = strlen(command);
+            // _player_nums--;
+            // FILE *buf_txt = freopen("buf.txt", "w", stdout);
+            // printf("%d ", _player_nums);
+            // while(*pbuf != '\0')      // get nums of players
+            // {
+            //     if(*pbuf == '1')    printf("1");
+            //     else if(*pbuf == '2')   printf("2");
+            //     else if(*pbuf == '3')   printf("3");
+            //     else if(*pbuf == '4')   printf("4");
+            //     // else    printf("%c", *pbuf);
+            //     pbuf++;
+            // }
+            // fclose(buf_txt);
+
+            // // // output into dump after origin info
+            // // FILE* buf_txt_dump = freopen("dump/dump_0.txt", "a", stdout);   
+            // // read from buftxt
+            // buf_txt = freopen("buf.txt", "r",stdin);
+            // char test[10];
+
+            // // unit test
+            // initMap();
+            // choosePlayer();
+
+            // fclose(buf_txt);
+            // // fclose(buf_txt_dump);
             continue;
         }
 
@@ -337,16 +340,19 @@ void inputGame(int j)
                 continue;
                 
             }
-
-            else if(!strcmp(buf, "step"))
-            {
-                buf = strtok(NULL, " ");
-                int i = atoi(buf);          //char -> int
-                /* unit test */
-                _playerChangePos(game.current_player, i);
-                continue;
-            }
         }
+
+        else if(!strcmp(buf, "step"))
+        {
+            buf = strtok(NULL, " ");
+            int i = atoi(buf);          //char -> int
+            /* unit test */
+            _playerChangePos(game.current_player, i);
+            // refresh state
+            game.current_player = game.current_player->next;    // End the current round 
+            continue;
+        }
+
 
         else if(!strcmp(buf, "dump"))
         {
@@ -356,7 +362,7 @@ void inputGame(int j)
 
         else if(!strcmp(buf, "quit"))
         {
-            // break;
+            break;
         }
     }
 
@@ -459,7 +465,7 @@ void Dump(int j){
 
 int main()
 {
-    for(int m=0;m<1;m++)
+    for(int m=0;m<10;m++)
     {
         inputGame(m);
         Dump(m);

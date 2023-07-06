@@ -1,0 +1,26 @@
+user AS
+preuser S
+A
+alive 1
+money 20000
+point 0
+item1 10
+item2 1
+item3 1
+buff 0
+stop 0
+userloc 20
+S
+alive 1
+money 10000
+point 222
+item1 1
+item2 1
+item3 1
+buff 0
+stop 0
+userloc 51
+MAP
+mapuser 18 A
+mapuser 51 S
+map 13 A 1

@@ -973,3 +973,84 @@ void setUserLoc(char Name, int loc)
         pPlayer = pPlayer->next;
     }
 }
+
+// debug function
+void _choosePlayer_(char *playerList)
+{
+    // 输入玩家个数
+    int playerNum = strlen(playerList) - 1;     //-1是因为从文件中读取的一行字符串包括了换行符\n, strlen()函数会计入这一个'\n'
+
+    // 显示选择角色的提示信息
+    char *playerNameList[4] = {"Q", "A", "S", "J"};
+    // printf("Choose\n");
+    // printf("1:Q 2:A 3:S 4:J\n");
+
+    // 错误输入检测
+    while (1)
+    {
+        // 输入选择角色的序列
+        int len = strlen(playerList) - 1;
+        if (len < playerNum)
+        {
+            // printf("输入位数太少!\n");
+        }
+        else if (len > playerNum)
+        {
+            // printf("输入位数过多!\n");
+        }
+        else
+        {
+            int result;
+            result = inputJudeg(playerList, len);
+            if (result == 1)
+            {
+                break;
+            }
+            else if (result == 2)
+            {
+                // printf("不能重复选择同一个角色!\n");
+            }
+            else
+            {
+                // printf("没有该角色编号!\n");
+            }
+        }
+    }
+
+    // 创建角色链表
+    PLAYER *firstPlayer, *p;
+    for (int i = 0; i < playerNum; i++)
+    {
+        PLAYER *player = (PLAYER *)malloc(sizeof(PLAYER));
+        int playerId = playerList[i] - '1';
+        player->PlayerId = playerId;
+        player->dead = 0;
+        player->BuffTime = 0;
+        player->Name = playerNameList[playerId];
+        player->CurPos = 0;
+        player->HouseId = NULL;
+        player->BlockNum = 1;
+        player->RobotNum = 1;
+        player->BombNum = 1;
+        player->SleepTime = 0;
+        player->Point = 0;
+        player->MovingDis = 0;
+        player->Money = initMoney;
+        player->next = NULL;
+        if (!i)
+        {
+            firstPlayer = player;
+            p = player;
+        }
+        else
+        {
+            p->next = player;
+            p = p->next;
+        }
+    }
+    p->next = firstPlayer;
+
+    game.player = firstPlayer;
+    game.current_player = firstPlayer;
+    game.play_num = playerNum;
+}

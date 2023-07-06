@@ -1,0 +1,11 @@
+10600
+12
+set pos Q 9
+set pos A 4
+step 8
+set item A 1 10
+set point Q 222
+set money A 20000
+set barrier 31
+dump
+quit

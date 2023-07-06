@@ -1,0 +1,13 @@
+16511
+241
+set pos A 4
+set pos Q 8
+set pos 12 J
+step 2
+set item A 1 10
+set point Q 222
+set money A 20000
+set map 31 J 1
+set barrier 34
+dump
+quit
