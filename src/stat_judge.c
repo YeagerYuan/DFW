@@ -57,12 +57,12 @@ int afterActionJudge(PLAYER *cur_p) {
     if(moving->been_blocked == ENCOUNTERED) {
         blocked(cur_p, moving->blocked_pos);
         free(moving);
-        return BOMBED;
+        return BLOCKED;
     }
     else if(moving->been_bombed == ENCOUNTERED) {
         bombed(cur_p, moving->bombed_pos);
         free(moving);
-        return BLOCKED;
+        return BOMBED;
     }
     else {
         return OK;

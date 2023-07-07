@@ -4,3 +4,11 @@ x64/
 *.sln
 *.vcxproj*
 build/
+minGW/
+CMake/
+ test/CMakeCache.txt
+test/CMakeFiles/
+test/Makefile
+test/cmake_install.cmake
+test/test.exe
+test/CMakeCache.txt
