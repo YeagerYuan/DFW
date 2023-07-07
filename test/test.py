@@ -34,21 +34,16 @@ def test():
                 incorrect += 1
                 incorrect_list.append('dump_' + input_file_index)
     print("\nTRUE:{} | FALSE:{}".format(str(correct), str(incorrect)))
-    if incorrect > 0: 
+    if incorrect > 0:
         print("\nError use case:")
         for x in incorrect_list:
             print("\n" + x)
 
 
 if __name__ == '__main__':
-    # os.system('rd .\\build')
-    # os.system('md .\\build')
-    # os.system('cd .\\build')
-    # os.system('rd .\')
     os.system('cmake -G "MinGW Makefiles" .')
     os.system('mingw32-make')
     os.system('test.exe')
-    # os.system('cd ../src && gcc test.c play.c display.c input.c stat_judge.c -o test && test')
     time.sleep(1)
     print("*************************\n")
     test()
