@@ -21,12 +21,12 @@ def test():
                 rd = d.read().split('\n')
                 if '\n' in rd:
                     rd.remove('\n')
-                sd = set(rd)
+                sd = set([i for i in rd if i != ''])
             with open(output_file, 'r') as o:
                 ro = o.read().split('\n')
                 if '\n' in ro:
                     ro.remove('\n')
-                so = set(ro)
+                so = set([i for i in ro if i != ''])
             if sd == so:
                 correct += 1
                 print(f"{file}      PASS")

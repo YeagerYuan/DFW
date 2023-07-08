@@ -105,10 +105,10 @@ void onSiteActionJudge(PLAYER *cur_p, int judgeSig) {
     case STPOINT:
         break;
     case MAGICHOUSE:
-        enterMagicHouse(cur_p);
+        enterMagicHouse(cur_p, NULL);
         break;
     case PROPHOUSE:
-        enterItemShop(cur_p);
+        enterItemShop(cur_p, NULL);
         break;
     case GIFTHOUSE:
         enterGiftShop(cur_p, NULL);

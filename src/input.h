@@ -1,3 +1,4 @@
+#pragma once
 #include "new_test.h"
 // 输入缓存
 #define BUF_SIZE 1024

@@ -1,3 +1,4 @@
+#pragma once
 #include "base.h"
 
 // 玩家在前进道路上所处的状态

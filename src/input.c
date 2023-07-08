@@ -7,94 +7,180 @@
 
 extern GAME game;
 
-int getInput(int *num){
-    printf("è¾“å…¥å‘½ä»¤>>>");
-    char inputString[BUF_SIZE] = {'\0'};
-    char command[BUF_SIZE / 2] = {'\0'};
-    char number[BUF_SIZE / 2] = {'\0'};
-    int i = 0,j = 0;
+/*
+*Ôö¼ÓÁËÅĞ¶ÏÊÇ·ñÊÇ²âÊÔÓÃµÄsetÃüÁî
+*/
+int getInput(int* num) {
+    printf("ÊäÈëÃüÁî>>>");
+    char inputString[BUF_SIZE] = { '\0' };
+    char inputStringTest[BUF_SIZE] = { '\0' };
+    char command[BUF_SIZE / 2] = { '\0' };
+    char number[BUF_SIZE / 2] = { '\0' };
+    char* buf_1, * buf_2;
+    int i = 0, j = 0;
     //int num = 0;
-    char *ptr;
-
+    char* ptr;
     _getString(inputString);
-    _stringNormalize(inputString);
-
-    while(inputString[i] != '\0'){
-        if(inputString[i]==' ' || inputString[i]=='\t' || inputString[i]=='\n') break;
-        command[i] = inputString[i];
-        i++;
-    }
-    while(inputString[i] != '\0'){
-        if (inputString[i]==' ' || inputString[i]=='\t' || inputString[i]=='\n') {
+    strcpy(inputStringTest, inputString);
+    buf_1 = strtok(inputStringTest, " ");
+    if (strcmp(buf_1, "set")) {
+        _stringNormalize(inputString);
+        while (inputString[i] != '\0') {
+            if (inputString[i] == ' ' || inputString[i] == '\t' || inputString[i] == '\n') break;
+            command[i] = inputString[i];
             i++;
-            continue;
         }
-        number[j] = inputString[i];
-        i++,j++;
-    }
-    *num = (int)strtol(number,&ptr, 0);
-
-    if(!strcmp(command,"ROLL") && number[0]=='\0'){
-        return ROLL;
-    }
-    else if(!strcmp(command,"SELL")){
-        return SELL;
-    }
-    else if(!strcmp(command,"BLOCK")){
-        if(*num>10 || *num<-10 || *num==0){
-            return ERROR;
+        while (inputString[i] != '\0') {
+            if (inputString[i] == ' ' || inputString[i] == '\t' || inputString[i] == '\n') {
+                i++;
+                continue;
+            }
+            number[j] = inputString[i];
+            i++, j++;
         }
-        else if(*ptr != '\0'){//æ•°å­—åé¢æœ‰å…¶ä»–è¾“å…¥çš„æƒ…å†µ
+        *num = (int)strtol(number, &ptr, 0);
+        if (!strcmp(command, "ROLL") && number[0] == '\0') {
+            return ROLL;
+        }
+        else if (!strcmp(command, "SELL")) {
+            return SELL;
+        }
+        else if (!strcmp(command, "BLOCK")) {
+            if (*num > 10 || *num < -10 || *num == 0) {
+                return ERROR;
+            }
+            else if (*ptr != '\0') {//Êı×ÖºóÃæÓĞÆäËûÊäÈëµÄÇé¿ö
+                return -1;
+            }
+            else {//ÊäÈëÕıÈ· µ÷ÓÃÏà¹Øº¯Êı
+                return BLOCK;
+            }
+        }
+        else if (!strcmp(command, "BOMB")) {
+            if (*num > 10 || *num < -10 || *num == 0) {
+                return -1;
+            }
+            else if (*ptr != '\0') {//Êı×ÖºóÃæÓĞÆäËûÊäÈëµÄÇé¿ö
+                return -1;
+            }
+            else {//ÊäÈëÕıÈ· µ÷ÓÃÏà¹Øº¯Êı
+                return BOMB;
+            }
+        }
+        else if (!strcmp(command, "ROBOT") && number[0] == '\0') {
+            return ROBOT;
+        }
+        else if (!strcmp(command, "QUERY") && number[0] == '\0') {
+            return QUERY;
+        }
+        else if (!strcmp(command, "HELP") && number[0] == '\0') {
+            return HELP;
+        }
+        else if (!strcmp(command, "BUY") && number[0] == '\0') {
+            return BUY;
+        }
+        else if (!strcmp(command, "UP") && number[0] == '\0') {
+            return UP;
+        }
+        else if (!strcmp(command, "QUIT") && number[0] == '\0') {
+            return QUIT;
+        }
+        else if (!strcmp(command, "STEP")) {
+            if (*num > MAPSIZE || *num < 0) {
+                return -1;
+            }
+            else if (*ptr != '\0') {//Êı×ÖºóÃæÓĞÆäËûÊäÈëµÄÇé¿ö
+                return -1;
+            }
+            else {//ÊäÈëÕıÈ· µ÷ÓÃÏà¹Øº¯Êı
+                return STEP;
+            }
+        }
+        else {
             return -1;
         }
-        else{//è¾“å…¥æ­£ç¡® è°ƒç”¨ç›¸å…³å‡½æ•°
-        return BLOCK;
+    }
+    else {
+        buf_2 = strtok(inputString, " ");
+        if (!strcmp(buf_2, "set")) {
+            buf_2 = strtok(NULL, " ");
+            if (!strcmp(buf_2, "money")) {
+                buf_2 = strtok(NULL, " ");
+                if (!strcmp(buf_2, "Q")) {
+                    int inputNumber = (int)strtol(buf_2, '\0', 0);
+                    *num = inputNumber;
+                    return 100;
+                }
+                else if (!strcmp(buf_2, "A")) {
+                    int inputNumber = (int)strtol(buf_2, '\0', 0);
+                    *num = inputNumber;
+                    return 101;
+                }
+                else if (!strcmp(buf_2, "S")) {
+                    int inputNumber = (int)strtol(buf_2, '\0', 0);
+                    *num = inputNumber;
+                    return 102;
+                }
+                else if (!strcmp(buf_2, "J")) {
+                    int inputNumber = (int)strtol(buf_2, '\0', 0);
+                    *num = inputNumber;
+                    return 103;
+                }
+            }
+            else if (!strcmp(buf_2, "point")) {
+                buf_2 = strtok(NULL, " ");
+                if (!strcmp(buf_2, "Q")) {
+                    int inputNumber = (int)strtol(buf_2, '\0', 0);
+                    *num = inputNumber;
+                    return 200;
+                }
+                else if (!strcmp(buf_2, "A")) {
+                    int inputNumber = (int)strtol(buf_2, '\0', 0);
+                    *num = inputNumber;
+                    return 201;
+                }
+                else if (!strcmp(buf_2, "S")) {
+                    int inputNumber = (int)strtol(buf_2, '\0', 0);
+                    *num = inputNumber;
+                    return 202;
+                }
+                else if (!strcmp(buf_2, "J")) {
+                    int inputNumber = (int)strtol(buf_2, '\0', 0);
+                    *num = inputNumber;
+                    return 203;
+                }
+            }
+            else if (!strcmp(buf_2, "buff")) {
+                buf_2 = strtok(NULL, " ");
+                if (!strcmp(buf_2, "Q")) {
+                    int inputNumber = (int)strtol(buf_2, '\0', 0);
+                    *num = inputNumber;
+                    return 300;
+                }
+                else if (!strcmp(buf_2, "A")) {
+                    int inputNumber = (int)strtol(buf_2, '\0', 0);
+                    *num = inputNumber;
+                    return 301;
+                }
+                else if (!strcmp(buf_2, "S")) {
+                    int inputNumber = (int)strtol(buf_2, '\0', 0);
+                    *num = inputNumber;
+                    return 302;
+                }
+                else if (!strcmp(buf_2, "J")) {
+                    int inputNumber = (int)strtol(buf_2, '\0', 0);
+                    *num = inputNumber;
+                    return 303;
+                }
+            }
         }
-    }
-    else if(!strcmp(command,"BOMB")){
-        if(*num>10 || *num<-10 || *num==0){
-            return -1;
+        else {
         }
-        else if(*ptr != '\0'){//æ•°å­—åé¢æœ‰å…¶ä»–è¾“å…¥çš„æƒ…å†µ
-            return -1;
-        }
-        else{//è¾“å…¥æ­£ç¡® è°ƒç”¨ç›¸å…³å‡½æ•°
-        return BOMB;
-        }
-    }
-    else if(!strcmp(command,"ROBOT") && number[0]=='\0'){
-        return ROBOT;
-    }
-    else if(!strcmp(command,"QUERY") && number[0]=='\0'){
-        return QUERY;
-    }
-    else if(!strcmp(command,"HELP") && number[0]=='\0'){
-        return HELP;
-    }
-    else if(!strcmp(command,"BUY") && number[0]=='\0'){
-        return BUY;
-    }
-    else if(!strcmp(command,"UP") && number[0]=='\0'){
-        return UP;
-    }
-    else if(!strcmp(command,"QUIT") && number[0]=='\0'){
-        return QUIT;
-    }
-    else if(!strcmp(command,"STEP")){
-        if(*num>MAPSIZE || *num<0){
-            return -1;
-        }
-        else if(*ptr != '\0'){//æ•°å­—åé¢æœ‰å…¶ä»–è¾“å…¥çš„æƒ…å†µ
-            return -1;
-        }
-        else{//è¾“å…¥æ­£ç¡® è°ƒç”¨ç›¸å…³å‡½æ•°
-        return STEP;
-        }
-    }
-    else{
         return -1;
     }
 }
+
+
 
 char* _stringNormalize(char* ptr){
     char *p = ptr;
@@ -128,7 +214,7 @@ void cleanCommandWindow() {
     _CUR_SPAWN
 }
 
-/*æ›´æ”¹ä¸ºé“å…·å±‹çš„è´­ä¹°è¾“å…¥å‡½æ•°*/
+/*¸ü¸ÄÎªµÀ¾ßÎİµÄ¹ºÂòÊäÈëº¯Êı*/
 int getNumberInput_1() {
     int num=0;
     char input_buf[BUF_SIZE];
@@ -136,12 +222,12 @@ int getNumberInput_1() {
         memset(input_buf, 0, BUF_SIZE * sizeof(char));
         gets(input_buf);
         if(strlen(input_buf) != 1) {
-            printf("è¯·è¾“å…¥å•ä¸ªæ•°å­—æˆ–å­—æ¯ï¼\n");
+            printf("ÇëÊäÈëµ¥¸öÊı×Ö»ò×ÖÄ¸£¡\n");
             continue;
         }
         else {
             if((input_buf[0] < 48 || input_buf[0] > 57) && input_buf[0] != 70) {
-                printf("è¯·è¾“å…¥æ•°å­— 0--9 æˆ– F !\n");
+                printf("ÇëÊäÈëÊı×Ö 0--9 »ò F !\n");
                 continue;
             }
             else {
@@ -150,7 +236,7 @@ int getNumberInput_1() {
                     break;
                 }
                 else if(input_buf[0] == 70) {
-                    num=70; // è¡¨ç¤ºF
+                    num=70; // ±íÊ¾F
                     break;
                 }
             }
@@ -168,15 +254,15 @@ int getNumberInput_1_123(OP *o) {
             gets(input_buf);
         }
         else {
-            input_buf[0] = o->num[0];// æ›¿ä»£æ€§åˆ¤æ–­
+            input_buf[0] = o->num[0];// Ìæ´úĞÔÅĞ¶Ï
         }
         if(strlen(input_buf) != 1) {
-            printf("æ”¾å¼ƒæœºä¼šï¼\n");
+            printf("·ÅÆú»ú»á£¡\n");
             return -1;
         }
         else {
             if((input_buf[0] < 48 || input_buf[0] > 57) && input_buf[0] != 70) {
-                printf("æ”¾å¼ƒæœºä¼šï¼\n");
+                printf("·ÅÆú»ú»á£¡\n");
                 return -1;
             }
             else {
@@ -196,12 +282,12 @@ void getSelectedNumChar(int num) {
         memset(input_buf, 0, BUF_SIZE * sizeof(char));
         gets(input_buf);
         if(strlen(input_buf) != num) {
-            printf("è¾“å…¥é•¿åº¦ä¸åŒ¹é…!è¯·é‡æ–°è¾“å…¥..\n");
+            printf("ÊäÈë³¤¶È²»Æ¥Åä!ÇëÖØĞÂÊäÈë..\n");
             continue;
         }
         else {
             if(input_buf[0] < 48 || input_buf[0] > 57) {
-                printf("è¾“å…¥å¿…é¡»ä¸º0--9,è¯·é‡æ–°è¾“å…¥.\n");
+                printf("ÊäÈë±ØĞëÎª0--9,ÇëÖØĞÂÊäÈë.\n");
                 continue;
             }
             num = input_buf[0] - '1';

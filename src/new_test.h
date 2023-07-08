@@ -6,6 +6,7 @@ typedef enum COMMAND_
     pRESETMONEY,  // 初始资金
     pRESETPLAYER, // 选择初始玩家 (124)
                   // 玩家、地图
+    sETSTOP,
     sETPOS,
     sETMONEY, // 设置某个玩家的金钱 (set money A 10000)
     sETPOINT,
@@ -28,6 +29,7 @@ typedef enum COMMAND_
     // other
     yESORNO, // yes or no
     nUM,     // 一个单独的num
+    qUIT,
 } COMMAND;
 
 // 指令的所有内容(类型、参数)
@@ -40,5 +42,8 @@ typedef struct COMMANDS_
 
 
 void preAction();
-void dump();
-void commandExplain(char* command, OP* command_state);
+void Dump(int j);
+void commandExplain(OP* command_state);
+void preSet();
+void afterAction();
+int openFile(int num);

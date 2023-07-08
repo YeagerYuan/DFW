@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <string.h>
 #include <malloc.h>
 #include <stdlib.h>
@@ -25,7 +25,6 @@ void initGame(OP *op1, OP *op2)
 
     }
     initMap();
-    chooseInitialFund();
     choosePlayer(op2);
     // 打印角色列表
     PLAYER *p = game.player;
@@ -227,12 +226,13 @@ void choosePlayer(OP *op)
     } else {
         while(op->num[i] != -1) {
             playerNum++;
+            i++;
         }
     }
 
     // 显示选择角色的提示信息
     char *playerNameList[4] = {"Q", "A", "S", "J"};
-    printf("Choose\n");
+    printf("请选择：\n");
     printf("1:Q 2:A 3:S 4:J\n");
     char playerList[1024] = {'\0'};
 
@@ -315,10 +315,12 @@ void choosePlayer(OP *op)
     game.player = firstPlayer;
     game.current_player = firstPlayer;
     game.play_num = playerNum;
-    clearFlush(stdin);
+    if (op == NULL) {
+        clearFlush(stdin);
+    }
 }
 
-int action(int sig, PLAYER *p, int action_pos)
+int action(int sig, PLAYER* p, int action_pos)
 {
 
     if (sig == ROLL)
@@ -329,7 +331,7 @@ int action(int sig, PLAYER *p, int action_pos)
         _RED
             printf("%d", i);
         _WHITE
-        printf("你当前的位置是: %d\n", p->CurPos);
+            printf("你当前的位置是: %d\n", p->CurPos);
         return ROLL;
     }
     else if (sig == BLOCK)
@@ -359,7 +361,7 @@ int action(int sig, PLAYER *p, int action_pos)
     }
     else if (sig == QUIT)
     {
-        printf("已经退出\n");
+        printf("do quit\n");
         return QUIT;
     }
     else if (sig == STEP)
@@ -369,7 +371,7 @@ int action(int sig, PLAYER *p, int action_pos)
     }
     else if (sig == ERROR)
     {
-        printf("错误\n");
+        printf("error\n");
         return ERROR;
     }
     else if (sig == BUY)
@@ -386,25 +388,108 @@ int action(int sig, PLAYER *p, int action_pos)
     {
         sellOwnBlock(p, action_pos, NULL);
         _CUR_SPAWN
-        printMap(game);
+            printMap(game);
         return SELL;
     }
-    else if(sig == POINT) {
+    else if (sig == POINT) {
         // 增加点数
-        p->Point+=action_pos;
+        p->Point += action_pos;
     }
-    else if(sig == MONEY) {
-        p->Money+=action_pos;
+    else if (sig == MONEY) {
+        p->Money += action_pos;
     }
-    else if(sig == POS_SET) {
+    else if (sig == POS_SET) {
         // 直接设置位置，忽略途中的道具
         p->CurPos = action_pos % MAPSIZE;
         // TODO：是否要适配位置，避免出现问题
     }
+    else if (sig == 100) {
+        while (p != NULL) {
+            if (p->PlayerId == 0) break;
+            p = p->next;
+        }
+        p->Money = action_pos;
+    }
+    else if (sig == 101) {
+        while (p != NULL) {
+            if (p->PlayerId == 1) break;
+            p = p->next;
+        }
+        p->Money = action_pos;
+    }
+    else if (sig == 102) {
+        while (p != NULL) {
+            if (p->PlayerId == 2) break;
+            p = p->next;
+        }
+        p->Money = action_pos;
+    }
+    else if (sig == 103) {
+        while (p != NULL) {
+            if (p->PlayerId == 3) break;
+            p = p->next;
+        }
+        p->Money = action_pos;
+    }
+    else if (sig == 200) {
+        while (p != NULL) {
+            if (p->PlayerId == 0) break;
+            p = p->next;
+        }
+        p->Point = action_pos;
+    }
+    else if (sig == 201) {
+        while (p != NULL) {
+            if (p->PlayerId == 1) break;
+            p = p->next;
+        }
+        p->Point = action_pos;
+    }
+    else if (sig == 202) {
+        while (p != NULL) {
+            if (p->PlayerId == 2) break;
+            p = p->next;
+        }
+        p->Point = action_pos;
+    }
+    else if (sig == 203) {
+        while (p != NULL) {
+            if (p->PlayerId == 3) break;
+            p = p->next;
+        }
+        p->Point = action_pos;
+    }
+    else if (sig == 300) {
+        while (p != NULL) {
+            if (p->PlayerId == 0) break;
+            p = p->next;
+        }
+        p->BuffTime = action_pos;
+    }
+    else if (sig == 301) {
+        while (p != NULL) {
+            if (p->PlayerId == 1) break;
+            p = p->next;
+        }
+        p->BuffTime = action_pos;
+    }
+    else if (sig == 302) {
+        while (p != NULL) {
+            if (p->PlayerId == 2) break;
+            p = p->next;
+        }
+        p->BuffTime = action_pos;
+    }
+    else if (sig == 303) {
+        while (p != NULL) {
+            if (p->PlayerId == 3) break;
+            p = p->next;
+        }
+        p->BuffTime = action_pos;
+    }
     else
     {
-        printf("no actions\n");
-        return ERROR;
+
     }
 }
 
@@ -685,7 +770,23 @@ void sellOwnBlock(PLAYER *cur_p, int num,OP *cur_t)
         }
     }
     else{
-        MAPBLOCK *blockToSell = &game.map[cur_t->num[0]];
+        num = cur_t->num[0];
+        if (num < 0 || num > MAPSIZE)
+        { // 判断输入位置的合法性
+            printf("您输入的情况不合法，请重新输入\n");
+            return;
+        }
+        MAPBLOCK *blockToSell = &(game.map[num]);
+        if (blockToSell->HouseType != LAND)
+        { // 该地皮不是空地，不能出售
+            printf("该地皮不是空地，您不能出售!\n");
+            return;
+        }
+        if (blockToSell->HouseOwnerId != cur_p->PlayerId)
+        { // 不是自己的地皮，不能出售
+            printf("这块地皮不属于你，你不能出售!\n");
+            return;
+        }
         PLAYER *player = game.current_player;
         for (int i = 0; i < game.play_num; i++)
         {
@@ -834,8 +935,9 @@ void payRent(PLAYER *from, PLAYER *to, int amount)
     to->Money += amount;
 }
 
-void enterItemShop(PLAYER *cur_p)
+void enterItemShop(PLAYER *cur_p, OP *op)
 {
+    int sig = 0;
     // 当调用函数就说明已经进入了道具屋，需要进行购买等操作，并且进行是否能够购买的判定
     if (cur_p->Point < ROBOT_POINTS)
     {
@@ -848,6 +950,7 @@ void enterItemShop(PLAYER *cur_p)
         printf("1--路障：%d    2--机器娃娃：%d    3--炸弹：%d\n", BLOCK_POINTS, ROBOT_POINTS, BOMB_POINTS);
         printf("目前你有 %d 个点数\n", cur_p->Point);
     }
+    int item_num = 0;
     // 取得输入
     while (1)
     {
@@ -856,8 +959,13 @@ void enterItemShop(PLAYER *cur_p)
             printf("你的点数不足以再购买道具，退出\n");
             return;
         }
-        int item_num = getNumberInput_1();
-        if (item_num == 70)
+        if(op == NULL) {
+            item_num = getNumberInput_1();
+        }
+        else {
+            item_num = op->num[0];
+        }
+        if (item_num == 70 || item_num == -1)
         {
             // 70表示F
             printf("退出道具屋！\n");
@@ -865,44 +973,8 @@ void enterItemShop(PLAYER *cur_p)
         }
         else
         {
-            if (cur_p->BlockNum + cur_p->BombNum + cur_p->RobotNum < 10)
-            {
-                if (item_num == 1)
-                {
-                    if (cur_p->Point >= BLOCK_POINTS)
-                    {
-                        printf("你购买了一个路障，花费 %d 点数\n", BLOCK_POINTS);
-                        cur_p->BlockNum++;
-                        cur_p->Point -= BLOCK_POINTS;
-                    }
-                }
-                else if (item_num == 2)
-                {
-                    if (cur_p->Point >= ROBOT_POINTS)
-                    {
-                        printf("你购买了一个机器娃娃，花费 %d 点数\n", ROBOT_POINTS);
-                        cur_p->RobotNum++;
-                        cur_p->Point -= ROBOT_POINTS;
-                    }
-                }
-                else if (item_num == 3)
-                {
-                    if (cur_p->Point >= BOMB_POINTS)
-                    {
-                        printf("你购买了一个炸弹，花费 %d 点数\n", BOMB_POINTS);
-                        cur_p->BombNum++;
-                        cur_p->Point -= BOMB_POINTS;
-                    }
-                }
-                else
-                {
-                    printf("没有所选的道具！\n");
-                    continue;
-                }
-            }
-            else
-            {
-                printf("道具已满，不能再购买\n");
+            sig = buyItem(cur_p, item_num);
+            if(sig == -1) {
                 break;
             }
         }
@@ -910,7 +982,51 @@ void enterItemShop(PLAYER *cur_p)
     return;
 }
 
-void enterMagicHouse(PLAYER *cur_p)
+int buyItem(PLAYER *cur_p, int item_num) {
+    if (cur_p->BlockNum + cur_p->BombNum + cur_p->RobotNum < 10)
+        {
+        if (item_num == 1)
+        {
+            if (cur_p->Point >= BLOCK_POINTS)
+            {
+                printf("你购买了一个路障，花费 %d 点数\n", BLOCK_POINTS);
+                cur_p->BlockNum++;
+                cur_p->Point -= BLOCK_POINTS;
+            }
+        }
+        else if (item_num == 2)
+        {
+            if (cur_p->Point >= ROBOT_POINTS)
+            {
+                printf("你购买了一个机器娃娃，花费 %d 点数\n", ROBOT_POINTS);
+                cur_p->RobotNum++;
+                cur_p->Point -= ROBOT_POINTS;
+            }
+        }
+        else if (item_num == 3)
+        {
+            if (cur_p->Point >= BOMB_POINTS)
+            {
+                printf("你购买了一个炸弹，花费 %d 点数\n", BOMB_POINTS);
+                cur_p->BombNum++;
+                cur_p->Point -= BOMB_POINTS;
+            }
+        }
+        else
+        {
+            printf("没有所选的道具！\n");
+            return 0;
+        }
+    }
+    else
+    {
+        printf("道具已满，不能再购买\n");
+        return -1;
+    }
+}
+
+
+void enterMagicHouse(PLAYER *cur_p, OP *op)
 {
     printf("魔法屋还没有开业\n");
     timer(1, ONCLOCK);

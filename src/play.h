@@ -84,8 +84,9 @@ int useRobot(PLAYER *p);
 
 void payRent(PLAYER *from, PLAYER *to, int amount);
 
-void enterItemShop(PLAYER *p);
-void enterMagicHouse(PLAYER *p);
+void enterItemShop(PLAYER *cur_p, OP *op);
+int buyItem(PLAYER *cur_p, int item_num);
+void enterMagicHouse(PLAYER *p, OP *op);
 void enterGiftShop(PLAYER *cur_p, OP *p);
 
 int blocked(PLAYER *cur_p, int blocked_pos);

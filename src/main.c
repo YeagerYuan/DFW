@@ -94,3 +94,4 @@ int ContinueGame()
     }
     return aliveNum != 1;
 }
+

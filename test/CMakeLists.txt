@@ -13,8 +13,8 @@ set(SOURCE_FILES
     ../src/play.h
     ../src/play.c
     ../src/stat_judge.c
-    ../src/test.h
-    ../src/test.c
+    ../src/new_test.h
+    ../src/new_test.c
     )
 
 add_executable(test ${SOURCE_FILES})
