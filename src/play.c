@@ -262,9 +262,9 @@ void choosePlayer(GAME *game1)
         player->Name = playerNameList[playerId];
         player->CurPos = 0;
         player->HouseId = NULL;
-        player->BlockNum = 1;
-        player->RobotNum = 1;
-        player->BombNum = 1;
+        player->BlockNum = 0;
+        player->RobotNum = 0;
+        player->BombNum = 0;
         player->SleepTime = 0;
         player->Point = 0;
         player->MovingDis = 0;
