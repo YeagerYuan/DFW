@@ -11,7 +11,7 @@ extern GAME game;
 MOVING_ENCOUNTERED * passedLandStatusSync(PLAYER *cur_p) {
     MOVING_ENCOUNTERED * info = (MOVING_ENCOUNTERED *)malloc(sizeof(MOVING_ENCOUNTERED));
     if(info == NULL) {
-        printf("run out of mem.\n");
+        printf("内存耗尽.\n");
         exit(1);
     }
     if(cur_p->MovingDis <= 0) {
@@ -80,7 +80,7 @@ void onSiteActionJudge(PLAYER *cur_p, int judgeSig) {
     switch (game.map[cur_p->CurPos].HouseType) {
     case LAND:
         if (block.HouseOwnerId == -1) {
-            buyEmptyBlock(cur_p);
+            buyEmptyBlock(cur_p, NULL);
         } else if (block.HouseOwnerId != cur_p->PlayerId)
         {
             if (cur_p->BuffTime > 0) {
@@ -111,7 +111,7 @@ void onSiteActionJudge(PLAYER *cur_p, int judgeSig) {
         enterItemShop(cur_p);
         break;
     case GIFTHOUSE:
-        enterGiftShop(cur_p);
+        enterGiftShop(cur_p, NULL);
         break;
     case JAIL:
         printf("您进入监狱，将被跳过两轮！\n");

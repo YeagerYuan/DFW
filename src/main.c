@@ -11,7 +11,7 @@ int ContinueGame();
 int main()
 {
     _COLOR_INIT
-    initGame(game);
+    initGame(NULL, NULL);
     PLAYER *cur_p;
     int player_sig = 0;
     int action_sig = 0;
@@ -48,7 +48,6 @@ int main()
 
         while (1)
         {
-
             // 单个玩家的输入循环
             player_sig = getInput(&action_pos);
             if (player_sig == ERROR)

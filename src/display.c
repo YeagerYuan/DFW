@@ -154,15 +154,15 @@ void printLine(int y)
 void printHelp()
 {
     _YELLOW
-    printf("Command:\n");
-    printf("Roll -- You can move 1~6 steps and after that you cannot use other commands\n");
-    printf("Sell n -- You can sell the land you own for twice the price, n is the location of your land\n");
-    printf("Block n -- You can place a block anywhere 10 steps before or after your current position,any passing player will be blocked.n is the relative position, and n is forward when it is positive\n");
-    printf("Bomb n --You can place a block anywhere 10 steps before or after your current position,any passing player will be bombed and sent to the hospital for 3 turns.n is the relative position, and n is forward when it is positive\n");
-    printf("Robot --You can use robot to clear the block or bomb anywhere 10 steps before or after your current position\n");
-    printf("Query -- Get your current asset situation\n");
-    printf("Help --See how to use other commands\n");
-    printf("Quit --Quit the game\n");
+    printf("命令:\n");
+    printf("Roll -- 您可以移动1~6个步,之后不能使用其他命令\n");
+    printf("Sell n -- 您可以以两倍的价格出售您拥有的土地,n是您土地的位置\n");
+    printf("Block n -- 您可以在当前位置之前或之后10步的任何位置放置一个路障,任何路过的玩家都会被拦下.n是相对位置,n是正值时向前\n");
+    printf("Bomb n --您可以在当前位置之前或之后 10 步的任何地方放置一个炸弹,任何路过的玩家都会被炸伤并送往医院3轮.n是相对位置,n为正时向前\n");
+    printf("Robot --您可以使用机器人从当前位置开始清除前方10步内全部的路障或炸弹\n");
+    printf("Query -- 了解您当前的资产状况\n");
+    printf("Help --了解如何使用其他命令\n");
+    printf("Quit --退出游戏\n");
     _WHITE
 }
 
@@ -170,8 +170,8 @@ void printStatus(PLAYER *cur_p)
 {
     char names[4][10] = {"Q", "A", "S", "J"};
     _YELLOW
-    printf("Player %d--%s     Robot---BLOCK---BOMB---MONEY---POINT\n", cur_p->PlayerId, names[cur_p->PlayerId]);
+    printf("玩家 %d--%s     机器人---路障---炸弹---金钱---点数\n", cur_p->PlayerId, names[cur_p->PlayerId]);
     _CUR_DOWN
-    printf("                  %d      %d     %d      %d      %d\n", cur_p->RobotNum, cur_p->BlockNum, cur_p->BombNum, cur_p->Money, cur_p->Point);
+    printf("                %d      %d     %d      %d      %d\n", cur_p->RobotNum, cur_p->BlockNum, cur_p->BombNum, cur_p->Money, cur_p->Point);
     _WHITE
 }

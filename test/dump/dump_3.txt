@@ -22,4 +22,4 @@ stop 0
 userloc 0
 MAP
 mapuser 12 Q
-map 5 A 2
+map 5 A 0

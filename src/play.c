@@ -7,21 +7,32 @@
 #include "base.h"
 #include "display.h"
 #include "input.h"
+#include "new_test.h"
 
 extern GAME game;
 extern int initMoney;
 
-void initGame()
+void initGame(OP *op1, OP *op2)
 {
+    int money_initial = 0;
+    if(op1 != NULL) {
+        money_initial = op1->num[0]; // 初始资金读取
+    }
+    else {
+        money_initial = initMoney; // 使用默认的初始资金
+    }
+    if(op2 != NULL) {
+
+    }
     initMap();
     chooseInitialFund();
-    choosePlayer(&game);
+    choosePlayer(op2);
     // 打印角色列表
     PLAYER *p = game.player;
     for (int i = 0; i < game.play_num; i++)
     {
         printf("%d %s\n", p->PlayerId, p->Name);
-        setInitialFund(p->PlayerId, initMoney);
+        setInitialFund(p->PlayerId, money_initial);
         p = p->next;
     }
 }
@@ -183,33 +194,40 @@ int inputJudeg(char *string, int length)
     return 1;
 }
 
-void choosePlayer(GAME *game1)
+void choosePlayer(OP *op)
 {
     // 输入玩家个数
-    int playerNum;
-    while (1)
-    {
-        printf("选择玩家数量：(2-4): ");
-        // 非数字字符
-        if (!scanf("%d", &playerNum))
+    int playerNum = 0;
+    int i =0;
+    if(op == NULL) {
+        while (1)
         {
-            printf("请输入数字!\n");
+            printf("选择玩家数量：(2-4): ");
+            // 非数字字符
+            if (!scanf("%d", &playerNum))
+            {
+                printf("请输入数字!\n");
+            }
+            // 人数过多
+            else if (playerNum > 4)
+            {
+                printf("输入玩家数量过多，请输入 2 到 4 的数字!\n");
+            }
+            // 人数过少
+            else if (playerNum < 2)
+            {
+                printf("输入玩家数量过少，请输入 2 到 4 的数字!\n");
+            }
+            else
+            {
+                break;
+            }
+            clearFlush(stdin);
         }
-        // 人数过多
-        else if (playerNum > 4)
-        {
-            printf("输入玩家数量过多，请输入 2 到 4 的数字!\n");
+    } else {
+        while(op->num[i] != -1) {
+            playerNum++;
         }
-        // 人数过少
-        else if (playerNum < 2)
-        {
-            printf("输入玩家数量过少，请输入 2 到 4 的数字!\n");
-        }
-        else
-        {
-            break;
-        }
-        clearFlush(stdin);
     }
 
     // 显示选择角色的提示信息
@@ -222,7 +240,16 @@ void choosePlayer(GAME *game1)
     while (1)
     {
         // 输入选择角色的序列
-        scanf("%s", playerList);
+        if(op == NULL) {
+            scanf("%s", playerList);
+        }
+        else {
+            for(i=0;i<playerNum;i++) {
+                char singal_c = op->num[i] + '0';
+                playerList[i] = singal_c;
+            }
+        }
+
         int len = strlen(playerList);
         if (len < playerNum)
         {
@@ -293,6 +320,7 @@ void choosePlayer(GAME *game1)
 
 int action(int sig, PLAYER *p, int action_pos)
 {
+
     if (sig == ROLL)
     {
         int i = roll();
@@ -331,7 +359,7 @@ int action(int sig, PLAYER *p, int action_pos)
     }
     else if (sig == QUIT)
     {
-        printf("do quit\n");
+        printf("已经退出\n");
         return QUIT;
     }
     else if (sig == STEP)
@@ -341,12 +369,12 @@ int action(int sig, PLAYER *p, int action_pos)
     }
     else if (sig == ERROR)
     {
-        printf("error\n");
+        printf("错误\n");
         return ERROR;
     }
     else if (sig == BUY)
     {
-        buyEmptyBlock(p);
+        buyEmptyBlock(p, NULL);
         return BUY;
     }
     else if (sig == UP)
@@ -356,10 +384,22 @@ int action(int sig, PLAYER *p, int action_pos)
     }
     else if (sig == SELL)
     {
-        sellOwnBlock(p, action_pos);
+        sellOwnBlock(p, action_pos, NULL);
         _CUR_SPAWN
         printMap(game);
         return SELL;
+    }
+    else if(sig == POINT) {
+        // 增加点数
+        p->Point+=action_pos;
+    }
+    else if(sig == MONEY) {
+        p->Money+=action_pos;
+    }
+    else if(sig == POS_SET) {
+        // 直接设置位置，忽略途中的道具
+        p->CurPos = action_pos % MAPSIZE;
+        // TODO：是否要适配位置，避免出现问题
     }
     else
     {
@@ -467,27 +507,16 @@ char getYesOrNo()
 }
 
 /*
- *传入指向当前玩家的指针，函数结束后指针仍指向该玩家
- *玩家买入房产后更新玩家的信息和地皮的信息
- */
-void buyEmptyBlock(PLAYER *cur_p)
-{
+*开发：购买房产
+*测试：设定某一房产归某人所有,实现set map功能
+*/
+
+void buyEmptyBlock(PLAYER *cur_p, OP *cur_t){
+    if(cur_t == NULL){
     int curPos = cur_p->CurPos;
     MAPBLOCK *currentBlock = &(game.map)[curPos];
     int currentCost = currentBlock->MapValue;
     char ch;
-
-    if (currentBlock->HouseType != LAND)
-    { // 该地皮不是空地，不能购买
-        // printf("The block is not land,you can not buy it!\n");
-        return;
-    }
-
-    if (currentBlock->HouseOwnerId != -1)
-    { // 该空地已经被别人拥有，不能购买
-        // printf("The land is owned by you or others,you can not buy it!\n");
-        return;
-    }
     printf("你想买这块地皮吗？[y/n]\n");
     ch = getYesOrNo();
 
@@ -516,6 +545,56 @@ void buyEmptyBlock(PLAYER *cur_p)
         p->houseID = cur_p->CurPos;
         p->next = cur_p->HouseId;
         cur_p->HouseId = p;
+    }
+   }
+   else{
+        MAPBLOCK *blockToHave = &(game.map)[cur_t->num[0]];
+        int level = cur_t->num[1];
+
+        //找到对应的玩家
+        while (cur_p->Name[0] != cur_t->player)
+        {
+            cur_p = cur_p->next;
+        }
+
+        // 判断该地皮是否已经归属于其他人，如果有则假装出售之
+        if (blockToHave->HouseOwnerId != -1)
+        {
+            PLAYER *player = cur_p;
+            while (player != NULL)
+            {
+                if (player->PlayerId == blockToHave->HouseOwnerId)
+                break;
+                player = player->next;
+            }
+
+            blockToHave->HouseOwnerId = -1; // 房屋ID恢复为初始ID
+            blockToHave->HouseLevel = -1;   // 房屋等级恢复为初始等级
+            LOCATION *p = player->HouseId, *q = player->HouseId;
+            while (p != NULL)
+            {
+                if (p->houseID == cur_t->num[0])
+                {
+                    break;
+                }
+                q = p;
+                p = p->next;
+            }
+            q->next = p->next;
+            free(p);
+        }
+        blockToHave->HouseOwnerId = cur_p->PlayerId;
+        blockToHave->HouseLevel++;
+
+        // 把该空地加入该玩家名下房产
+        LOCATION *p = (LOCATION *)malloc(sizeof(LOCATION));
+        if (p == NULL) exit(1);
+        p->houseID = cur_t->num;
+        p->next = cur_p->HouseId;
+        cur_p->HouseId = p;
+
+        //升级房产
+        blockToHave->HouseLevel = level;
     }
 }
 
@@ -557,52 +636,82 @@ void upOwnBlock(PLAYER *cur_p)
     }
     else
     {
-        printf("Your land is already 3 level!\n");
+        printf("你的地皮已经达到了三级！\n");
         return;
     }
 }
 
 /*
- *cur_p为指向当前玩家的指针
- *num是玩家要出售的房产在地图上的绝对位置
+ *开发：出售房产
+ *测试：实现set unmap功能
  */
-void sellOwnBlock(PLAYER *cur_p, int num)
+void sellOwnBlock(PLAYER *cur_p, int num,OP *cur_t)
 {
-    if (num <= 0 || num > MAPSIZE)
-    { // 判断输入位置的合法性
-        printf("You input a wrong number,please reinput\n");
-        return;
-    }
-    MAPBLOCK *blockToSell = &(game.map[num]);
-    if (blockToSell->HouseType != LAND)
-    { // 该地皮不是空地，不能出售
-        printf("The block is not land,you can not sell it!\n");
-        return;
-    }
-    if (blockToSell->HouseOwnerId != cur_p->PlayerId)
-    { // 不是自己的地皮，不能出售
-        printf("The land is not owned by you,you can not sell it!\n");
-        return;
-    }
-    printf("出售成功！\n");
-    // 出售完成，更新状态
-    cur_p->Money += blockToSell->MapValue * (blockToSell->HouseLevel) * 2;
-    blockToSell->HouseOwnerId = -1; // 房屋ID恢复为初始ID
-    blockToSell->HouseLevel = 0;    // 房屋等级恢复为初始等级
-    // currentBlock.house_flag;/*******************************************************************待定*/
-    // 把该空地从玩家名下房产中删除
-    LOCATION *p = cur_p->HouseId, *q = NULL;
-    while (p != NULL)
-    {
-        if (p->houseID == num)
-        {
-            break;
+    if (cur_t == NULL){
+        if (num < 0 || num > MAPSIZE)
+        { // 判断输入位置的合法性
+            printf("您输入的情况不合法，请重新输入\n");
+            return;
         }
-        q = p;
-        p = p->next;
+        MAPBLOCK *blockToSell = &(game.map[num]);
+        if (blockToSell->HouseType != LAND)
+        { // 该地皮不是空地，不能出售
+            printf("该地皮不是空地，您不能出售!\n");
+            return;
+        }
+        if (blockToSell->HouseOwnerId != cur_p->PlayerId)
+        { // 不是自己的地皮，不能出售
+            printf("这块地皮不属于你，你不能出售!\n");
+            return;
+        }
+        printf("出售成功！\n");
+        // 出售完成，更新状态
+        cur_p->Money += blockToSell->MapValue * (blockToSell->HouseLevel + 1) * 2;
+        blockToSell->HouseOwnerId = -1; // 房屋ID恢复为初始ID
+        blockToSell->HouseLevel = -1;    // 房屋等级恢复为初始等级
+        // 把该空地从玩家名下房产中删除
+        LOCATION *p = cur_p->HouseId, *q = NULL;
+        while (p != NULL)
+        {
+            if (p->houseID == num) break;
+            q = p;
+            p = p->next;
+        }
+        if(p == cur_p->HouseId){
+            cur_p->HouseId = p->next;
+        }
+        else{
+            q->next = p->next;
+        }
     }
-    q = p->next;
-    free(p);
+    else{
+        MAPBLOCK *blockToSell = &game.map[cur_t->num[0]];
+        PLAYER *player = game.current_player;
+        for (int i = 0; i < game.play_num; i++)
+        {
+            if (blockToSell->HouseOwnerId == player->PlayerId)
+                break;
+            player = player->next;
+        }
+        blockToSell->HouseOwnerId = -1; // 房屋ID恢复为初始ID
+        blockToSell->HouseLevel = -1;   // 房屋等级恢复为初始等级
+        LOCATION *p = player->HouseId, *q = player->HouseId;
+        while (p != NULL)
+        {
+            if (p->houseID == num)
+            {
+                break;
+            }
+            q = p;
+            p = p->next;
+        }
+        if(p == player->HouseId){
+            player->HouseId = p->next;
+        }
+        else{
+            q->next = p->next;
+        }
+    }
 }
 
 int _canUseBomb(int pos)
@@ -807,11 +916,15 @@ void enterMagicHouse(PLAYER *cur_p)
     timer(1, ONCLOCK);
 }
 
-void enterGiftShop(PLAYER *cur_p)
+void enterGiftShop(PLAYER *cur_p, OP *p)
 {
     printf("进入礼品屋，请选择你的礼品: \n");
     printf("1---奖金（%d）    2---点数（%d）    3---财神时间（%d轮）\n", GIFTMONEY, GIFTPOINT, GIFTCSROUND);
-    int gift_num = getNumberInput_1_123();
+
+    int gift_num = -1;
+
+    gift_num = getNumberInput_1_123(p);
+
     // 只有一次选择机会，因此只判定一次即可
     if (gift_num == -1)
     {
@@ -886,8 +999,18 @@ void _buyEmptyBlock_(int playerNumber, int num, int level)
 
 void _upOwnBlock_(PLAYER *cur_p, int num, int level)
 {
-    MAPBLOCK *blockToHave = &(game.map)[num];
-    blockToHave->HouseLevel = level;
+    int curPos = cur_p->CurPos;
+    MAPBLOCK *currentBlock = &(game.map)[curPos];
+    int currentCost = currentBlock->MapValue;
+currentBlock->HouseLevel = -1;
+currentBlock->rentAmount = 0;
+for (int i = 0; i <= level; ++i) {
+if (currentBlock->HouseLevel < 3)
+    {
+        currentBlock->HouseLevel++;
+        currentBlock->rentAmount += currentCost * 2;
+    }
+}
 }
 
 void _sellOwnBlock_(int num)

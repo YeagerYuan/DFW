@@ -159,12 +159,17 @@ int getNumberInput_1() {
     return num;
 }
 
-int getNumberInput_1_123() {
+int getNumberInput_1_123(OP *o) {
     int num=0;
     char input_buf[BUF_SIZE];
     while(1) {
         memset(input_buf, 0, BUF_SIZE * sizeof(char));
-        gets(input_buf);
+        if(o == NULL) {
+            gets(input_buf);
+        }
+        else {
+            input_buf[0] = o->num[0];// 替代性判断
+        }
         if(strlen(input_buf) != 1) {
             printf("放弃机会！\n");
             return -1;
@@ -191,12 +196,12 @@ void getSelectedNumChar(int num) {
         memset(input_buf, 0, BUF_SIZE * sizeof(char));
         gets(input_buf);
         if(strlen(input_buf) != num) {
-            printf("input length not match! please reinput.\n");
+            printf("输入长度不匹配!请重新输入..\n");
             continue;
         }
         else {
             if(input_buf[0] < 48 || input_buf[0] > 57) {
-                printf("input must be 0--9, please reinput.\n");
+                printf("输入必须为0--9,请重新输入.\n");
                 continue;
             }
             num = input_buf[0] - '1';

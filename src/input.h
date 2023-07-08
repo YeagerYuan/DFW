@@ -1,3 +1,4 @@
+#include "new_test.h"
 // 输入缓存
 #define BUF_SIZE 1024
 
@@ -9,4 +10,4 @@ char* _getString(char* inputString);
 int getInput(int* num);
 void cleanCommandWindow();
 int getNumberInput_1();
-int getNumberInput_1_123();
+int getNumberInput_1_123(OP *o);

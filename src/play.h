@@ -1,6 +1,7 @@
 #pragma once
 
 #include "base.h"
+#include "new_test.h"
 
 // 动作状态和单元格道具状态（有混用，后续讨论是否改进）
 #define ROLL 1
@@ -14,6 +15,9 @@
 #define STEP 9
 #define BUY 10
 #define UP 11
+#define POINT 12
+#define MONEY 13
+#define POS_SET 14
 #define ERROR -1
 
 // 时钟状态
@@ -45,14 +49,14 @@
 #define GIFTPOINT 200
 #define GIFTCSROUND 5
 
-void initGame();
+void initGame(OP *op1, OP *op2);
 void initMap();
 void chooseInitialFund();
 void setInitialPoint(int playerNumber, int pointNum);
 void setInitialFund(int playerNumner, int moneyNum);
 void setInitialItem(int playerNumber, int item, int itemNum);
 void setInitialBuff(int playerNumber, int buffTime);
-void choosePlayer();
+void choosePlayer(OP *op);
 void exitGame();
 int inputJudeg(char *string, int length);
 
@@ -64,9 +68,9 @@ void _syncPlayerPos(PLAYER *cur_p);
 void _playerChangePos(PLAYER *p, int pos);
 void playerPosToMap(PLAYER *cur_p);
 void printStatus(PLAYER *cur_p);
-void buyEmptyBlock(PLAYER *cur_p);
+void buyEmptyBlock(PLAYER *cur_p, OP *cur_t);
 void upOwnBlock(PLAYER *cur_p);
-void sellOwnBlock(PLAYER *cur_p, int num);
+void sellOwnBlock(PLAYER *cur_p, int num,OP *cur_t);
 
 // time related
 void timer(long sleep_time, int sig);
@@ -82,7 +86,7 @@ void payRent(PLAYER *from, PLAYER *to, int amount);
 
 void enterItemShop(PLAYER *p);
 void enterMagicHouse(PLAYER *p);
-void enterGiftShop(PLAYER *cur_p);
+void enterGiftShop(PLAYER *cur_p, OP *p);
 
 int blocked(PLAYER *cur_p, int blocked_pos);
 void bombed(PLAYER *cur_p, int bombed_pos);

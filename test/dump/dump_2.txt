@@ -23,4 +23,4 @@ userloc 51
 MAP
 mapuser 18 A
 mapuser 51 S
-map 13 A 1
+map 13 A 0

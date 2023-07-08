@@ -23,6 +23,6 @@ userloc 8
 MAP
 mapuser 1 Q
 mapuser 5 A
-map 5 A 2
+map 5 A 0
 item 20 3
 item 21 1

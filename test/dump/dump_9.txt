@@ -33,5 +33,5 @@ userloc 8
 MAP
 mapuser 4 A
 mapuser 8 Q
-map 31 J 1
+map 31 J 0
 item 34 1
