@@ -728,7 +728,7 @@ void payRent(PLAYER *from, PLAYER *to, int amount)
 void enterItemShop(PLAYER *cur_p)
 {
     // 当调用函数就说明已经进入了道具屋，需要进行购买等操作，并且进行是否能够购买的判定
-    if (cur_p->Point < BLOCK_POINTS)
+    if (cur_p->Point < ROBOT_POINTS)
     {
         printf("你的点数不足以购买道具！\n");
         return;
