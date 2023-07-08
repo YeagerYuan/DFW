@@ -140,13 +140,13 @@ int getNumberInput_1() {
             continue;
         }
         else {
-            if(input_buf[0] < 48 || input_buf[0] > 57 || input_buf[0] != 70) {
+            if((input_buf[0] < 48 || input_buf[0] > 57) && input_buf[0] != 70) {
                 printf("请输入数字 0--9 或 F !\n");
                 continue;
             }
             else {
                 if(input_buf[0] >= 48 && input_buf[0] <= 57) {
-                    num = input_buf[0] - '1';
+                    num = input_buf[0] - '0';
                     break;
                 }
                 else if(input_buf[0] == 70) {
@@ -170,7 +170,7 @@ int getNumberInput_1_123() {
             return -1;
         }
         else {
-            if(input_buf[0] < 48 || input_buf[0] > 57 || input_buf[0] != 70) {
+            if((input_buf[0] < 48 || input_buf[0] > 57) && input_buf[0] != 70) {
                 printf("放弃机会！\n");
                 return -1;
             }

@@ -6,7 +6,7 @@ x64/
 build/
 minGW/
 CMake/
- test/CMakeCache.txt
+test/CMakeCache.txt
 test/CMakeFiles/
 test/Makefile
 test/cmake_install.cmake

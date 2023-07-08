@@ -1,8 +1,4 @@
-cd test
-del .\Makefile
-del .\test.exe
-del .\cmake_install.cmake
-del .\CMakeCache.txt
+cd .\test
 python .\test.py
 cd ..
 pause

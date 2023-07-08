@@ -1,27 +1,23 @@
 #include "test.h"
 #include "play.h"
-#include "judge.h"
 
 GAME game;
 int initMoney = INITIALMONEY;
-int DEBUGMODE = 0;
 
 /* test input */
 void inputGame(int j)
 {
-    int judge_sig = 0;
     FILE *file = NULL;
     char command[MAX_LENGTH];
     // static int j = 0;       // number of input_.txt
-    char n_j[10];
-    char addr[50] = "input/input_";
+    char n_j;
+    char addr[50] = "input/input_0.txt";
     itoa(j, &n_j, 10);          //int -> char
-    strcat(addr, n_j);
-    strcat(addr, ".txt");
+    addr[12] = n_j;
     file = fopen(addr, "r");
 
     if (file == NULL) {
-        //printf("open file failed.\n");
+        printf("open file failed.\n");
         return;
     }
     // read input based on line
@@ -348,27 +344,12 @@ void inputGame(int j)
 
         else if(!strcmp(buf, "step"))
         {
-
             buf = strtok(NULL, " ");
             int i = atoi(buf);          //char -> int
             /* unit test */
             _playerChangePos(game.current_player, i);
-
-            // round end
-            // judge_sig = afterActionJudge(game.current_player);
-            //round begin
-            // onSiteActionJudge(game.current_player, judge_sig);
-
-            // buyEmptyBlock(game.current_player);
-            // char read_buf[MAX_LENGTH];
-            // fgets(read_buf, MAX_LENGTH, file);
-            // FILE* read_out_txt = fopen("read_buf.txt","w");
-            // fprintf("%c",read_buf);
-            // FILE* read_buf_txt = freopen("read_buf.txt", "r",stdin);
-            
             // refresh state
             game.current_player = game.current_player->next;    // End the current round 
-
             continue;
         }
 
@@ -395,13 +376,10 @@ void Dump(int j){
     PLAYER * pPlayer = game.player;
     FILE * fp = NULL;
     // static int j = 0;       // number of dump_.txt
-    char n_j[10];
-    char addr[50] = "dump/dump_";
+    char n_j;
+    char addr[50] = "dump/dump_0.txt";
     itoa(j, &n_j, 10);
-    // addr[10] = n_j;
-    strcat(addr, n_j);
-    strcat(addr,".txt");
-
+    addr[10] = n_j;
     fp = fopen(addr, "w");
     if(!fp){
         printf("open failed");
@@ -487,8 +465,7 @@ void Dump(int j){
 
 int main()
 {
-    DEBUGMODE = 1;
-    for(int m=0;m<1000;m++)
+    for(int m=0;m<10;m++)
     {
         inputGame(m);
         Dump(m);
