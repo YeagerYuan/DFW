@@ -769,16 +769,16 @@ void enterItemShop(PLAYER *cur_p)
                 }
                 else if (item_num == 2)
                 {
-                    if (cur_p->Point >= BLOCK_POINTS)
+                    if (cur_p->Point >= ROBOT_POINTS)
                     {
                         printf("你购买了一个机器娃娃，花费 %d 点数\n", ROBOT_POINTS);
                         cur_p->RobotNum++;
                         cur_p->Point -= ROBOT_POINTS;
                     }
                 }
-                else if (item_num == 2)
+                else if (item_num == 3)
                 {
-                    if (cur_p->Point >= BLOCK_POINTS)
+                    if (cur_p->Point >= BOMB_POINTS)
                     {
                         printf("你购买了一个炸弹，花费 %d 点数\n", BOMB_POINTS);
                         cur_p->BombNum++;
