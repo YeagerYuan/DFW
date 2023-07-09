@@ -6,6 +6,7 @@
 #include "display.h"
 
 extern GAME game;
+extern int round_nums;
 
 /*
 *�������ж��Ƿ��ǲ����õ�set����
@@ -199,6 +200,10 @@ int getInput(int* num) {
                 int inputNumber = (int)strtol(buf_2,'\0',0);
                 *num = inputNumber;
                 return 400;
+            }
+            else if(!strcmp(buf_2, "round")){
+                round_nums = 9;
+                return 500;
             }
         }
         else {

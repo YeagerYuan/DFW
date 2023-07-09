@@ -12,6 +12,7 @@
 extern GAME game;
 extern int initMoney;
 int god_lasting_time;
+extern int round_nums;
 
 void initGame(OP *op1, OP *op2)
 {
@@ -492,6 +493,9 @@ int action(int sig, PLAYER* p, int action_pos)
     }
     else if(sig == 400){
         game.map[action_pos].ItemType = GOd;
+    }
+    else if(sig == 500){
+        round_nums = 9;
     }
     else
     {

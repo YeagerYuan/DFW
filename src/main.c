@@ -13,7 +13,6 @@ int ContinueGame();
 int main()
 {
     // 游戏回合数
-    int round_nums = 0;
     _COLOR_INIT
     initGame(NULL, NULL);
     PLAYER *cur_p;

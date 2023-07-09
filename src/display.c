@@ -10,6 +10,7 @@
     } while (0)
 
 extern GAME game;
+extern int round_nums;
 
 char Color[8][10] = {
     "\033[30m",
@@ -195,9 +196,9 @@ void printStatus(PLAYER *cur_p)
     default:
         break;
     }
-    printf("  机器人---路障---金钱---点数\n", cur_p->PlayerId, names[cur_p->PlayerId]);
+    printf("  机器人---路障---金钱---点数---回合数\n", cur_p->PlayerId, names[cur_p->PlayerId]);
     _CUR_DOWN
-    printf("                %d      %d      %d      %d\n", cur_p->RobotNum, cur_p->BlockNum, cur_p->Money, cur_p->Point);
+    printf("                %d      %d      %d      %d      %d\n", cur_p->RobotNum, cur_p->BlockNum, cur_p->Money, cur_p->Point, round_nums);
      _CUR_DOWN
     if(p != NULL){
         printf("您的房产位置：\t");
