@@ -43,7 +43,7 @@ typedef struct COMMANDS_
 
 
 void preAction();
-void Dump(int j);
+void Dump();
 void commandExplain(OP* command_state);
 void preSet();
 void afterAction();

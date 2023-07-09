@@ -617,7 +617,7 @@ void buyEmptyBlock(PLAYER *cur_p, OP *cur_t){
         // 购买完成，更新状态
         currentBlock->HouseOwnerId = cur_p->PlayerId;
         currentBlock->HouseLevel++;
-        currentBlock->rentAmount = currentCost * 2;
+        currentBlock->rentAmount = currentCost / 2;
         cur_p->Money -= currentCost;
         // 把该空地加入该玩家名下房产
         LOCATION *p = (LOCATION *)malloc(sizeof(LOCATION));
@@ -671,6 +671,7 @@ void buyEmptyBlock(PLAYER *cur_p, OP *cur_t){
         blockToHave->HouseOwnerId = cur_p->PlayerId;
         blockToHave->HouseLevel++;
 
+
         // 把该空地加入该玩家名下房产
         LOCATION *p = (LOCATION *)malloc(sizeof(LOCATION));
         if (p == NULL) exit(1);
@@ -680,6 +681,7 @@ void buyEmptyBlock(PLAYER *cur_p, OP *cur_t){
 
         //升级房产
         blockToHave->HouseLevel = level;
+        blockToHave->rentAmount = (level + 1) * blockToHave->MapValue / 2;
     }
 }
 
@@ -754,6 +756,7 @@ void sellOwnBlock(PLAYER *cur_p, int num,OP *cur_t)
         cur_p->Money += blockToSell->MapValue * (blockToSell->HouseLevel + 1) * 2;
         blockToSell->HouseOwnerId = -1; // 房屋ID恢复为初始ID
         blockToSell->HouseLevel = -1;    // 房屋等级恢复为初始等级
+        blockToSell->rentAmount = 0;
         // 把该空地从玩家名下房产中删除
         LOCATION *p = cur_p->HouseId, *q = NULL;
         while (p != NULL)
@@ -796,6 +799,7 @@ void sellOwnBlock(PLAYER *cur_p, int num,OP *cur_t)
         }
         blockToSell->HouseOwnerId = -1; // 房屋ID恢复为初始ID
         blockToSell->HouseLevel = -1;   // 房屋等级恢复为初始等级
+        blockToSell->MapValue = 0;
         LOCATION *p = player->HouseId, *q = player->HouseId;
         while (p != NULL)
         {

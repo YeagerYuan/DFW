@@ -2,7 +2,7 @@ user QA
 preuser A
 Q
 alive 1
-money 42000
+money 40000
 point 0
 item1 0
 item2 0

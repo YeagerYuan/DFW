@@ -7,7 +7,7 @@ point 114
 item1 0
 item2 0
 item3 0
-buff 21
+buff 20
 stop 0
 userloc 17
 A
@@ -43,4 +43,4 @@ userloc 0
 MAP
 mapuser 5 A
 mapuser 17 Q
-map 9 Q -1
+map 9 Q 2

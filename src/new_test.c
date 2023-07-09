@@ -158,6 +158,12 @@ void preAction()
     {
         sel_p = playerSel(cur_op->player);
         sel_p->Point = cur_op->num[0];
+        break;
+    }case sETSTOP:
+    {
+        sel_p = playerSel(cur_op->player);
+        sel_p->SleepTime = cur_op->num[0] + 1;
+        break;
     }
     case sETITEM:
     {
@@ -189,7 +195,8 @@ void preAction()
     {
         sel_p = playerSel(cur_op->player);
         game.map[cur_op->num[0]].HouseOwnerId = sel_p->PlayerId;
-        _upOwnBlock_(sel_p, cur_op->num[0], cur_op->num[1]);
+        game.map[cur_op->num[0]].HouseLevel = cur_op->num[1];
+        game.map[cur_op->num[0]].rentAmount = (cur_op->num[1] + 1) * game.map[cur_op->num[0]].MapValue / 2;
         LOCATION* newLocation = (LOCATION*)malloc(sizeof(LOCATION));
         newLocation->houseID = cur_op->num[0];
         newLocation->next = sel_p->HouseId;
@@ -295,7 +302,7 @@ void preAction()
     }
     case dUMP:
     {
-        Dump(inputFileNum - 1);
+        Dump();
         gameState = END;
         break;
     }
@@ -473,7 +480,9 @@ void commandExplain(OP* command_state)
     {
         ctn = 0;
         getLine(buffer);
-        buffer[strlen(buffer) - 1] = '\0';
+        if (buffer[strlen(buffer) - 1] == '\n') {
+            buffer[strlen(buffer) - 1] = '\0';
+        }
         buf = strtok(buffer, " "); // String splitting, taking out the string before the first space
         printf("buffer: %s, buf: %s\n", buffer, buf);
         // Preset mode
@@ -931,47 +940,37 @@ int isDigitStr(char* str) {
 
 
 /* get game state & print into file */
-void Dump(int j) {
+void Dump()
+{
     PLAYER* pPlayer = game.player;
     FILE* fp = NULL;
-    // static int j = 0;       // number of dump_.txt
+    static int j = 0;       // number of dump_.txt
     char n_j[10];
     char addr[50] = "dump/dump_";
     itoa(j, &n_j, 10);
     strcat(addr, n_j);
     strcat(addr, ".txt");
+
     fp = fopen(addr, "w");
-    if (!fp) {
+    if (!fp)
+    {
         printf("open failed");
         return;
     }
 
     // user AQS
     char name[5] = "";
-    for (int i = 0; i < game.play_num; i++) {
+    for (int i = 0; i < game.play_num; i++)
+    {
         name[i] = pPlayer->Name[0];
         pPlayer = pPlayer->next;
     }
     fprintf(fp, "user %s\n", name);
 
-    //pretuser A
+    // pretuser A
     fprintf(fp, "preuser %c\n", game.current_player->Name[0]);
 
     // user info
-    // pPlayer = game.player;
-    // for (int i = 0; i < game.play_num; i++){
-    //     fprintf(fp, "%c\n", pPlayer->Name[0]);
-    //     fprintf(fp, "alive %d\n", 1-pPlayer->dead);
-    //     fprintf(fp, "money %d\n", pPlayer->Money);
-    //     fprintf(fp, "point %d\n", pPlayer->Point);
-    //     fprintf(fp, "item1 %d\n", pPlayer->BlockNum);
-    //     fprintf(fp, "item2 %d\n", pPlayer->RobotNum);
-    //     fprintf(fp, "item3 %d\n", pPlayer->BombNum);
-    //     fprintf(fp, "buff %d\n", pPlayer->BuffTime);
-    //     fprintf(fp, "stop %d\n", pPlayer->SleepTime);
-    //     fprintf(fp, "userloc %d\n", pPlayer->CurPos);
-    //     pPlayer = pPlayer->next;
-    // }
     pPlayer = game.player;
     char players_name[4] = { 'Q', 'A', 'S', 'J' };
     int flag = 0;
@@ -994,8 +993,18 @@ void Dump(int j) {
             fprintf(fp, "item1 %d\n", pPlayer->BlockNum);
             fprintf(fp, "item2 %d\n", pPlayer->RobotNum);
             fprintf(fp, "item3 %d\n", pPlayer->BombNum);
-            fprintf(fp, "buff %d\n", pPlayer->BuffTime);
-            fprintf(fp, "stop %d\n", pPlayer->SleepTime);
+            if (pPlayer->BuffTime == 0){
+                fprintf(fp, "buff %d\n", pPlayer->BuffTime);
+            }
+            else {
+                fprintf(fp, "buff %d\n", pPlayer->BuffTime - 1);
+            }
+            if (pPlayer->SleepTime == 0) {
+                fprintf(fp, "stop %d\n", pPlayer->SleepTime);
+            }
+            else {
+                fprintf(fp, "stop %d\n", pPlayer->SleepTime - 1);
+            }
             fprintf(fp, "userloc %d\n", pPlayer->CurPos);
             flag = 0;
         }
@@ -1014,50 +1023,80 @@ void Dump(int j) {
     }
 
     // MAP
-    char owner_flag = 0;
     fprintf(fp, "MAP\n");
 
-    // mapuser [n] [AQSJ]//地块n上的玩家（由先到达的排在前）
-    for (int i = 0; i < 70; i++) {
-        if (game.map[i].PlayerId != -1) {
-            if (game.map[i].PlayerId == 0)   owner_flag = 'Q';
-            else if (game.map[i].PlayerId == 1)  owner_flag = 'A';
-            else if (game.map[i].PlayerId == 2)  owner_flag = 'S';
-            else if (game.map[i].PlayerId == 3)  owner_flag = 'J';
-            fprintf(fp, "mapuser %d %c\n", i, owner_flag, owner_flag);
+    pPlayer = game.current_player;
+    char buf_i[10];
+    char owner_flag[10];
+    char buf_print[50];
+    for (int i = 0; i < 70; i++)
+    {
+        if (game.map[i].PlayerId != -1)
+        {
+            if (game.map[i].PlayerId == 0)
+                strcpy(owner_flag, "Q");
+            else if (game.map[i].PlayerId == 1)
+                strcpy(owner_flag, "A");
+            else if (game.map[i].PlayerId == 2)
+                strcpy(owner_flag, "S");
+            else if (game.map[i].PlayerId == 3)
+                strcpy(owner_flag, "J");
+            // fprintf(fp, "mapuser %d %c\n", i, owner_flag);
+            strcpy(buf_print, "mapuser ");
+            itoa(i, &buf_i, 10);
+            strcat(buf_print, buf_i);
+            strcat(buf_print, " ");
+            strcat(buf_print, owner_flag);
+            for (int n = 0; n < game.play_num; n++)
+            {
+                if (strcmp(pPlayer->Name, owner_flag) && pPlayer->CurPos == i)
+                {
+                    strcat(buf_print, pPlayer->Name);
+                }
+                pPlayer = pPlayer->next;
+            }
+            strcat(buf_print, "\n");
+            fprintf(fp, buf_print);
         }
     }
 
     // map [n] [A|Q|S|J] [level]//地块n上某玩家拥有等级为level的房屋
-    for (int i = 0; i < 70; i++) {
-        if (game.map[i].HouseOwnerId != -1) {
-            //get owner char
-            if (game.map[i].HouseOwnerId == 0)   owner_flag = 'Q';
-            else if (game.map[i].HouseOwnerId == 1)  owner_flag = 'A';
-            else if (game.map[i].HouseOwnerId == 2)  owner_flag = 'S';
-            else if (game.map[i].HouseOwnerId == 3)  owner_flag = 'J';
-            fprintf(fp, "map %d %c %d\n", i, owner_flag, game.map[i].HouseLevel);
+    char _owner_flag;
+    for (int i = 0; i < 70; i++)
+    {
+        if (game.map[i].HouseOwnerId != -1)
+        {
+            // get owner char
+            if (game.map[i].HouseOwnerId == 0)
+                _owner_flag = 'Q';
+            else if (game.map[i].HouseOwnerId == 1)
+                _owner_flag = 'A';
+            else if (game.map[i].HouseOwnerId == 2)
+                _owner_flag = 'S';
+            else if (game.map[i].HouseOwnerId == 3)
+                _owner_flag = 'J';
+            fprintf(fp, "map %d %c %d\n", i, _owner_flag, game.map[i].HouseLevel);
         }
     }
 
     // item [n] [1|3]//地块n上存在某个道具
-    for (int i = 0; i < 70; i++) {
-        if (game.map[i].ItemType == BLOCK)
+    for (int i = 0; i < 70; i++)
+    {
+        if (game.map[i].ItemType == BLOCk)
         {
             fprintf(fp, "item %d 1\n", i);
         }
-        else if (game.map[i].ItemType == ROBOT)
+        else if (game.map[i].ItemType == ROBOt)
         {
             fprintf(fp, "item %d 2\n", i);
         }
-        else if (game.map[i].ItemType == BOMB)
+        else if (game.map[i].ItemType == BOMb)
         {
             fprintf(fp, "item %d 3\n", i);
         }
     }
 
-    // j++;    // next dump
-    // printf("output success");
+    j++;    // next dump
     fclose(fp);
     return;
 }

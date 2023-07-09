@@ -13,7 +13,7 @@ userloc 13
 A
 alive 1
 money 20000
-point 200
+point 180
 item1 0
 item2 0
 item3 0

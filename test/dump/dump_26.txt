@@ -43,4 +43,4 @@ userloc 0
 MAP
 mapuser 3 Q
 mapuser 7 A
-map 5 A -1
+map 5 A 3

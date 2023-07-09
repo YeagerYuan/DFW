@@ -19,7 +19,7 @@ item2 0
 item3 0
 buff 0
 stop 0
-userloc 3
+userloc 5
 S
 alive 0
 money 0

@@ -1,5 +1,5 @@
 user QA
-preuser Q
+preuser A
 Q
 alive 1
 money 10000
@@ -9,7 +9,7 @@ item2 0
 item3 0
 buff 0
 stop 0
-userloc 3
+userloc 0
 A
 alive 1
 money 10000
@@ -19,7 +19,7 @@ item2 0
 item3 0
 buff 0
 stop 0
-userloc 7
+userloc 10
 S
 alive 0
 money 0
@@ -41,5 +41,5 @@ buff 0
 stop 0
 userloc 0
 MAP
-mapuser 3 Q
-mapuser 7 A
+mapuser 0 Q
+mapuser 10 A
