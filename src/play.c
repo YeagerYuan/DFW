@@ -11,6 +11,7 @@
 
 extern GAME game;
 extern int initMoney;
+int god_lasting_time;
 
 void initGame(OP *op1, OP *op2)
 {
@@ -19,6 +20,7 @@ void initGame(OP *op1, OP *op2)
         money_initial = op1->num[0]; // 初始资金读取
     }
     else {
+        chooseInitialFund();
         money_initial = initMoney; // 使用默认的初始资金
     }
     if(op2 != NULL) {
@@ -43,7 +45,8 @@ void initMap()
     char buffer[BUF_SIZE];
     char tmp[2];
     tmp[1] = '\0';
-    strcpy(buffer, "0111111111111151111111111111211111131111111111111611111111111114777777");
+    //strcpy(buffer, "0111111111111151111111111111211111131111111111111611111111111114777777");
+    strcpy(buffer, "0111111111111181111111111111211111131111111111111811111111111118777777");
     for (int i = 0; i < MAPSIZE; ++i)
     {
         tmp[0] = buffer[i];
@@ -115,11 +118,11 @@ void setInitialItem(int playerNumber, int item, int itemNum)
         /*设置机器娃娃*/
         player->RobotNum = itemNum;
     }
-    else if (item == 3)
-    {
-        /*设置炸弹*/
-        player->BombNum = itemNum;
-    }
+    // else if (item == 3)
+    // {
+    //     /*设置炸弹*/
+    //     player->BombNum = itemNum;
+    // }
 }
 
 /*设置是否有财神，buffTime表示buff的回合数*/
@@ -140,7 +143,7 @@ void chooseInitialFund()
     PLAYER *p = game.current_player;
     PLAYER *q = game.current_player;
 
-    printf("Please input initial money:");
+    printf("请输入初始资金（1000-50000，默认是10000）:");
     while (1)
     {
         _getString(number);
@@ -152,7 +155,7 @@ void chooseInitialFund()
         moneyInput = (int)strtol(number, &ptr, 0);
         if ((moneyInput < 1000 || moneyInput > 50000) || *ptr != '\0')
         {
-            printf("You input a bad number,please reinput :");
+            printf("您的输入有误请重新输入:");
         }
         else
         {
@@ -339,11 +342,11 @@ int action(int sig, PLAYER* p, int action_pos)
         useBlock(p, action_pos);
         return BLOCK;
     }
-    else if (sig == BOMB)
-    {
-        useBomb(p, action_pos);
-        return BOMB;
-    }
+    // else if (sig == BOMB)
+    // {
+    //     useBomb(p, action_pos);
+    //     return BOMB;
+    // }
     else if (sig == ROBOT)
     {
         useRobot(p);
@@ -486,6 +489,9 @@ int action(int sig, PLAYER* p, int action_pos)
             p = p->next;
         }
         p->BuffTime = action_pos;
+    }
+    else if(sig == 400){
+        game.map[action_pos].ItemType = GOd;
     }
     else
     {
@@ -819,11 +825,11 @@ void sellOwnBlock(PLAYER *cur_p, int num,OP *cur_t)
     }
 }
 
-int _canUseBomb(int pos)
-{
-    MAPBLOCK block = game.map[pos];
-    return block.PlayerId == -1 && !(block.HouseType == HOSPITAL || block.HouseType == JAIL) && block.ItemType == NONe;
-}
+// int _canUseBomb(int pos)
+// {
+//     MAPBLOCK block = game.map[pos];
+//     return block.PlayerId == -1 && !(block.HouseType == HOSPITAL || block.HouseType == JAIL) && block.ItemType == NONe;
+// }
 
 int _canUseBlock(int pos)
 {
@@ -831,34 +837,34 @@ int _canUseBlock(int pos)
     return block.PlayerId == -1 && !(block.HouseType == HOSPITAL || block.HouseType == JAIL) && block.ItemType == NONe;
 }
 
-int useBomb(PLAYER *p, int dis)
-{
-    int ret = FAIL;
-    if (p->BombNum <= 0)
-    {
-        printf("您没有炸弹！\n");
-    }
-    else if (dis < -10 || dis > 10)
-    {
-        printf("炸弹使用距离为10米以内！\n");
-    }
-    else if (_canUseBomb((p->CurPos + dis + MAPSIZE) % MAPSIZE))
-    {
-        game.map[p->CurPos + dis].ItemType = BOMb;
-        p->BombNum--;
+// int useBomb(PLAYER *p, int dis)
+// {
+//     int ret = FAIL;
+//     if (p->BombNum <= 0)
+//     {
+//         printf("您没有炸弹！\n");
+//     }
+//     else if (dis < -10 || dis > 10)
+//     {
+//         printf("炸弹使用距离为10米以内！\n");
+//     }
+//     else if (_canUseBomb((p->CurPos + dis + MAPSIZE) % MAPSIZE))
+//     {
+//         game.map[p->CurPos + dis].ItemType = BOMb;
+//         p->BombNum--;
 
-        ret = SUCCESS;
-        cleanCommandWindow();
-        printMap(game);
-        _CUR_INPUT
-        printf("使用炸弹成功！\n");
-    }
-    else
-    {
-        printf("当前位置不能放置炸弹！\n");
-    }
-    return ret;
-}
+//         ret = SUCCESS;
+//         cleanCommandWindow();
+//         printMap(game);
+//         _CUR_INPUT
+//         printf("使用炸弹成功！\n");
+//     }
+//     else
+//     {
+//         printf("当前位置不能放置炸弹！\n");
+//     }
+//     return ret;
+// }
 
 int useBlock(PLAYER *p, int dis)
 {
@@ -949,13 +955,19 @@ void enterItemShop(PLAYER* cur_p, OP* op)
     if (cur_p->Point < ROBOT_POINTS)
     {
         printf("你的点数不足以购买道具！\n");
-        op->command = qUITITEMSHOP;
+        if(op!=NULL)    op->command = qUITITEMSHOP;
         return;
     }
+    // else
+    // {
+    //     printf("欢迎光临道具屋，请选择你所需要的道具：\n");
+    //     printf("1--路障：%d    2--机器娃娃：%d    3--炸弹：%d\n", BLOCK_POINTS, ROBOT_POINTS, BOMB_POINTS);
+    //     printf("目前你有 %d 个点数\n", cur_p->Point);
+    // }
     else
     {
         printf("欢迎光临道具屋，请选择你所需要的道具：\n");
-        printf("1--路障：%d    2--机器娃娃：%d    3--炸弹：%d\n", BLOCK_POINTS, ROBOT_POINTS, BOMB_POINTS);
+        printf("1--路障：%d    2--机器娃娃：%d\n", BLOCK_POINTS, ROBOT_POINTS);
         printf("目前你有 %d 个点数\n", cur_p->Point);
     }
     int item_num = 0;
@@ -1021,16 +1033,16 @@ int buyItem(PLAYER* cur_p, int item_num) {
             }
             return -1;
         }
-        else if (item_num == 3)
-        {
-            if (cur_p->Point >= BOMB_POINTS)
-            {
-                printf("你购买了一个炸弹，花费 %d 点数\n", BOMB_POINTS);
-                cur_p->BombNum++;
-                cur_p->Point -= BOMB_POINTS;
-            }
-            return -1;
-        }
+        // else if (item_num == 3)
+        // {
+        //     if (cur_p->Point >= BOMB_POINTS)
+        //     {
+        //         printf("你购买了一个炸弹，花费 %d 点数\n", BOMB_POINTS);
+        //         cur_p->BombNum++;
+        //         cur_p->Point -= BOMB_POINTS;
+        //     }
+        //     return -1;
+        // }
         else
         {
             printf("没有所选的道具！\n");
@@ -1311,4 +1323,83 @@ void _choosePlayer_(char *playerList)
     game.player = firstPlayer;
     game.current_player = firstPlayer;
     game.play_num = playerNum;
+}
+
+/* --------------------new request------------- */
+int roll_god()
+{
+    srand((unsigned int)time(0));
+    return (rand() % 70);
+}
+
+void refreshGodLoc()
+{
+    int god_loc = roll_god();
+    MAPBLOCK *godMAP = game.map;
+    if(godMAP[god_loc].PlayerId == -1 && godMAP[god_loc].ItemType == NONe)
+    {
+        godMAP[god_loc].ItemType = GOd;
+        return;
+    }
+    return;
+}
+
+// 判断当前游戏是否有玩家身上有财神buff
+int exitBUFFjudge()
+{
+    PLAYER *player = game.player;
+    for(int i = 0; i < game.play_num; i++)
+    {
+        if(player->BuffTime > 0)
+        {
+            return 1;
+        }
+    }
+    for (int i = 0; i < 70; i++)
+    {
+        if(game.map[i].ItemType == GOd)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int findGOD()
+{
+    for (int i=0;i<70;i++)
+    {
+        if(game.map[i].ItemType == GOd) return i;
+    }
+    return -1;
+}
+
+void refreshGodTime(int round_nums)
+{
+    int all_players_round = round_nums / game.play_num;
+    int exit_buff_flag = exitBUFFjudge();
+    srand((unsigned int)time(0));
+    int prob = rand() % 100;        //概率，分母为100, 这里设置为每回合都有50%概率刷新财神
+    int refresh_round = 10;         //刷新的回合数，这里设为10个回合后开始刷新财神
+
+    // GOD 只存在5个回合
+    int find_god_flag = findGOD();
+    if(find_god_flag)
+    {
+        god_lasting_time --;
+        if(!god_lasting_time)
+        {
+            game.map[find_god_flag].ItemType = NONe;
+            god_lasting_time = 6 * game.play_num;
+        }
+    }
+
+    if(((all_players_round >= refresh_round) && (prob > 90) && (!exit_buff_flag)) || ((all_players_round % refresh_round == (refresh_round - 1)) && !exit_buff_flag))
+    {
+        refreshGodLoc();
+        god_lasting_time = 6 * game.play_num;
+        round_nums = 0; //清除1次10回合
+        return;
+    }
+    return;
 }

@@ -1,0 +1,17 @@
+10000
+1234
+set pos Q 10
+set item Q 3 1
+set item A 3 1
+bomb 4
+step 1
+N
+step 2
+N
+step 3
+N
+step 4
+N
+dump
+quit
+//测试炸弹放在医院

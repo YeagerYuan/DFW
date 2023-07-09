@@ -16,6 +16,7 @@ FILE* pInputFile;
 int initMoney = INITIALMONEY;
 char buffer[MAX_LENGTH + 1];
 int inputFileNum = 0;
+extern int round_nums;
 
 enum GameState
 {
@@ -531,6 +532,22 @@ void commandExplain(OP* command_state)
                     command_state->num[0] = moneySet;
                 }
             }
+            
+
+            else if (!strcmp(buf, "god"))
+            {
+                buf = strtok(NULL, " ");
+                int i = atoi(buf);
+                command_state->command = sETGOD;
+                command_state->num[0] = i;
+            }
+
+            else if (!strcmp(buf, "round"))
+            {
+                buf = strtok(NULL, " ");
+                round_nums = 9;
+            }
+
 
             else if (!strcmp(buf, "point"))
             {

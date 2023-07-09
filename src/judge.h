@@ -5,6 +5,7 @@
 #define BOMBED 1
 #define BLOCKED 2
 #define OK 3
+#define GOD 4
 
 // 前进路上的道具状态
 #define ENCOUNTERED 1  // 表示有某个道具

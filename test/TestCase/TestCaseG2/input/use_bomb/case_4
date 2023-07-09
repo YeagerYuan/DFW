@@ -1,0 +1,16 @@
+10000
+1234
+set pos Q 1
+set item Q 3 1
+set item A 3 1
+step 1
+N
+bomb 2
+step 2
+step 3
+N
+step 4
+N
+dump
+quit
+//测试炸弹放在有玩家的地方

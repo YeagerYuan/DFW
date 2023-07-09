@@ -101,3 +101,9 @@ int _useBomb_(int loc);
 int _useBlock_(int loc);
 void setUserLoc(char Name, int loc);
 void _choosePlayer_(char *playerList);
+
+//新需求
+int roll_god();
+void refreshGodLoc();
+int exitBUFFjudge();
+void refreshGodTime(int round_nums);

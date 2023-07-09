@@ -7,9 +7,13 @@
 
 GAME game;
 int initMoney = INITIALMONEY;
+// 游戏回合数
+int round_nums = 0;
 int ContinueGame();
 int main()
 {
+    // 游戏回合数
+    int round_nums = 0;
     _COLOR_INIT
     initGame(NULL, NULL);
     PLAYER *cur_p;
@@ -77,6 +81,8 @@ int main()
         playerPosToMap(cur_p);
 
         cur_p = cur_p->next;
+        refreshGodTime(round_nums);    //生成财神
+        round_nums++;
     }
 }
 

@@ -1,0 +1,9 @@
+10000
+1234
+set map 1 A 2
+set item Q 3 1
+bomb 1
+step 1
+dump
+quit
+//测试炸弹放在有地产的地方后踩到炸弹后不会交钱

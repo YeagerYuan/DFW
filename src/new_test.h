@@ -14,6 +14,7 @@ typedef enum COMMAND_
     sETBUFF,
     sETMAP, // 设置地图归属 (set map 5 A 2)
     sETUNMAP,
+    sETGOD,
     // 道具
     sETBOMB,
     sETBARRIER,

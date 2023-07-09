@@ -1,0 +1,17 @@
+10000
+1234
+set item Q 3 1
+set item A 3 1
+set item S 3 1
+set item J 3 1
+bomb 1
+step 1
+bomb 2
+step 2
+bomb 3
+step 3
+bomb 4
+step 4
+dump
+quit
+//测试四个人全踩炸弹

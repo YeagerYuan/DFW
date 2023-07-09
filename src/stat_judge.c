@@ -42,6 +42,13 @@ MOVING_ENCOUNTERED * passedLandStatusSync(PLAYER *cur_p) {
             info->blocked_pos = iter_cur;
             break;
         }
+        else if(game.map[iter_cur].ItemType == GOd){
+            printf("在%d号地块获得财神祝福\n", iter_cur);
+            timer(2, ONCLOCK);
+            info->been_god = ENCOUNTERED;
+            info->god_pos = iter_cur;
+            break;
+        }
         else {
             continue;
         }
@@ -64,6 +71,11 @@ int afterActionJudge(PLAYER *cur_p) {
         free(moving);
         return BLOCKED;
     }
+    else if(moving->been_god == ENCOUNTERED){
+        cur_p->BuffTime = 5;
+        game.map[moving->god_pos].ItemType = NONe;
+        return GOD;
+    }
     else {
         return OK;
     }
@@ -74,6 +86,9 @@ void onSiteActionJudge(PLAYER *cur_p, int judgeSig) {
         cur_p->BuffTime--;
     }
     if (judgeSig == BOMBED) {
+        return;
+    }
+    if (judgeSig == GOD) {
         return;
     }
     MAPBLOCK block = game.map[cur_p->CurPos];

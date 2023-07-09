@@ -1,0 +1,20 @@
+1000
+1234
+set money Q 50
+set money A 500
+set money S 1000
+set money J 5000
+set pos Q 1
+set pos A 29
+set pos S 36
+set pos J 50
+step 1                  
+Y                       
+step 2                  
+Y                      
+step 3
+Y      
+step 4
+N
+dump
+quit

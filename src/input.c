@@ -8,12 +8,12 @@
 extern GAME game;
 
 /*
-*Ôö¼ÓÁËÅĞ¶ÏÊÇ·ñÊÇ²âÊÔÓÃµÄsetÃüÁî
+*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½ï¿½Ç·ï¿½ï¿½Ç²ï¿½ï¿½ï¿½ï¿½Ãµï¿½setï¿½ï¿½ï¿½ï¿½
 */
 int getInput(int* num) {
     //printf("I am right 3\n");
     //getchar();
-    printf("ÇëÊäÈë>>>");
+    printf("è¯·è¾“å…¥>>>");
     char inputString[BUF_SIZE] = { '\0' };
     char inputStringTest[BUF_SIZE] = { '\0' };
     char command[BUF_SIZE / 2] = { '\0' };
@@ -53,10 +53,10 @@ int getInput(int* num) {
             if (*num > 10 || *num < -10 || *num == 0) {
                 return ERROR;
             }
-            else if (*ptr != '\0') {//Êı×ÖºóÃæÓĞÆäËûÊäÈëµÄÇé¿ö
+            else if (*ptr != '\0') {//ï¿½ï¿½ï¿½Öºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 return -1;
             }
-            else {//ÊäÈëÕıÈ· µ÷ÓÃÏà¹Øº¯Êı
+            else {//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È· ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øºï¿½ï¿½ï¿½
                 return BLOCK;
             }
         }
@@ -64,10 +64,10 @@ int getInput(int* num) {
             if (*num > 10 || *num < -10 || *num == 0) {
                 return -1;
             }
-            else if (*ptr != '\0') {//Êı×ÖºóÃæÓĞÆäËûÊäÈëµÄÇé¿ö
+            else if (*ptr != '\0') {//ï¿½ï¿½ï¿½Öºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 return -1;
             }
-            else {//ÊäÈëÕıÈ· µ÷ÓÃÏà¹Øº¯Êı
+            else {//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È· ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øºï¿½ï¿½ï¿½
                 return BOMB;
             }
         }
@@ -93,10 +93,10 @@ int getInput(int* num) {
             if (*num > MAPSIZE || *num < 0) {
                 return -1;
             }
-            else if (*ptr != '\0') {//Êı×ÖºóÃæÓĞÆäËûÊäÈëµÄÇé¿ö
+            else if (*ptr != '\0') {//ï¿½ï¿½ï¿½Öºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 return -1;
             }
-            else {//ÊäÈëÕıÈ· µ÷ÓÃÏà¹Øº¯Êı
+            else {//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È· ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øºï¿½ï¿½ï¿½
                 return STEP;
             }
         }
@@ -107,7 +107,7 @@ int getInput(int* num) {
     else {
         //printf("I am right 1\n");
         //getchar();
-        puts(inputString);
+       //puts(inputString);
         buf_2 = strtok(inputString, " ");
         if (!strcmp(buf_2, "set")) {
             buf_2 = strtok(NULL, " ");
@@ -194,6 +194,12 @@ int getInput(int* num) {
                     return 303;
                 }
             }
+            else if (!strcmp(buf_2,"god")){
+                buf_2 = strtok(NULL," ");
+                int inputNumber = (int)strtol(buf_2,'\0',0);
+                *num = inputNumber;
+                return 400;
+            }
         }
         else {
         }
@@ -234,7 +240,7 @@ void cleanCommandWindow() {
     _CUR_SPAWN
 }
 
-/*¸ü¸ÄÎªµÀ¾ßÎİµÄ¹ºÂòÊäÈëº¯Êı*/
+/*ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½İµÄ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ëº¯ï¿½ï¿½*/
 int getNumberInput_1() {
     int num=0;
     char input_buf[BUF_SIZE];
@@ -242,12 +248,12 @@ int getNumberInput_1() {
         memset(input_buf, 0, BUF_SIZE * sizeof(char));
         gets(input_buf);
         if(strlen(input_buf) != 1) {
-            printf("ÇëÊäÈëµ¥¸öÊı×Ö»ò×ÖÄ¸£¡\n");
+            printf("è¯·è¾“å…¥å•ä¸ªæ•°å­—æˆ–å­—æ¯\n");
             continue;
         }
         else {
             if((input_buf[0] < 48 || input_buf[0] > 57) && input_buf[0] != 70) {
-                printf("ÇëÊäÈëÊı×Ö 0--9 »ò F !\n");
+                printf("è¯·è¾“å…¥æ•°å­—0~9!\n");
                 continue;
             }
             else {
@@ -256,7 +262,7 @@ int getNumberInput_1() {
                     break;
                 }
                 else if(input_buf[0] == 70) {
-                    num=70; // ±íÊ¾F
+                    num=70; // ï¿½ï¿½Ê¾F
                     break;
                 }
             }
@@ -275,15 +281,15 @@ int getNumberInput_1_123(OP *o) {
         }
         else {
 
-            input_buf[0] = o->num[0]+'0';// Ìæ´úĞÔÅĞ¶Ï
+            input_buf[0] = o->num[0]+'0';// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½
         }
         if(strlen(input_buf) != 1) {
-            printf("·ÅÆú»ú»á£¡\n");
+            printf("æ”¾å¼ƒæœºä¼š\n");
             return -1;
         }
         else {
             if((input_buf[0] < 48 || input_buf[0] > 57) && input_buf[0] != 70) {
-                printf("·ÅÆú»ú»á£¡\n");
+                printf("æ”¾å¼ƒæœºä¼š\n");
                 return -1;
             }
             else {
@@ -303,12 +309,12 @@ void getSelectedNumChar(int num) {
         memset(input_buf, 0, BUF_SIZE * sizeof(char));
         gets(input_buf);
         if(strlen(input_buf) != num) {
-            printf("ÊäÈë³¤¶È²»Æ¥Åä!ÇëÖØĞÂÊäÈë..\n");
+            printf("è¾“å…¥é•¿åº¦ä¸åŒ¹é…ï¼Œè¯·é‡æ–°è¾“å…¥\n");
             continue;
         }
         else {
             if(input_buf[0] < 48 || input_buf[0] > 57) {
-                printf("ÊäÈë±ØĞëÎª0--9,ÇëÖØĞÂÊäÈë.\n");
+                printf("è¾“å…¥å¿…é¡»æ˜¯0~9ï¼Œè¯·é‡æ–°è¾“å…¥\n");
                 continue;
             }
             num = input_buf[0] - '1';

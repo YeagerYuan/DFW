@@ -1,0 +1,7 @@
+1000
+1234
+set barrier 5
+step 6
+n                  
+dump
+quit

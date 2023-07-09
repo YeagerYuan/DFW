@@ -13,6 +13,7 @@ typedef enum ITEMTYPE_ {
     BOMb,
     BLOCk,
     ROBOt,
+    GOd
 }ITEMTYPE;
 
 
@@ -21,6 +22,8 @@ typedef struct MOVING_ENCOUNTERED_ {
     int been_blocked;
     int blocked_pos;
     int bombed_pos;
+    int been_god;   //路过财神标志位
+    int god_pos;    //财神位置
 }MOVING_ENCOUNTERED;
 
 typedef enum HOUSETYPE_
@@ -33,6 +36,7 @@ typedef enum HOUSETYPE_
     HOSPITAL,     // 医院
     JAIL,         // 监狱
     MINERALFILED, // 矿地
+    PARK,          //公园
 } HOUSETYPE;
 
 typedef struct LOCATION_{

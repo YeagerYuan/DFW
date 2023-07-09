@@ -1,0 +1,8 @@
+1000
+1234
+set item Q 1 1
+block 10
+step 11
+n
+dump
+quit

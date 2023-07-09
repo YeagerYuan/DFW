@@ -77,13 +77,17 @@ void _printBlock(MAPBLOCK block)
             break;
         }
     }
-    else if (block.ItemType == BOMb)
-    {
-        printOfColor("@", RED);
-    }
+    // else if (block.ItemType == BOMb)
+    // {
+    //     printOfColor("@", RED);
+    // }
     else if (block.ItemType == BLOCk)
     {
         printOfColor("#", RED);
+    }
+    else if (block.ItemType == GOd)
+    {
+        printOfColor("F", RED);
     }
     else
     {
@@ -134,6 +138,9 @@ void _printBlock(MAPBLOCK block)
         case MINERALFILED:
             printOfColor("$", YELLOW);
             break;
+        case PARK:
+            printOfColor("P", PURPLE);
+            break;
         }
     }
 }
@@ -158,7 +165,7 @@ void printHelp()
     printf("Roll -- 您可以移动1~6个步,之后不能使用其他命令\n");
     printf("Sell n -- 您可以以两倍的价格出售您拥有的土地,n是您土地的位置\n");
     printf("Block n -- 您可以在当前位置之前或之后10步的任何位置放置一个路障,任何路过的玩家都会被拦下.n是相对位置,n是正值时向前\n");
-    printf("Bomb n --您可以在当前位置之前或之后 10 步的任何地方放置一个炸弹,任何路过的玩家都会被炸伤并送往医院3轮.n是相对位置,n为正时向前\n");
+    // printf("Bomb n --您可以在当前位置之前或之后 10 步的任何地方放置一个炸弹,任何路过的玩家都会被炸伤并送往医院3轮.n是相对位置,n为正时向前\n");
     printf("Robot --您可以使用机器人从当前位置开始清除前方10步内全部的路障或炸弹\n");
     printf("Query -- 了解您当前的资产状况\n");
     printf("Help --了解如何使用其他命令\n");
@@ -169,9 +176,45 @@ void printHelp()
 void printStatus(PLAYER *cur_p)
 {
     char names[4][10] = {"Q", "A", "S", "J"};
+    LOCATION *p = cur_p->HouseId;
     _YELLOW
-    printf("玩家 %d--%s     机器人---路障---炸弹---金钱---点数\n", cur_p->PlayerId, names[cur_p->PlayerId]);
+    switch(cur_p->PlayerId)
+    {
+    case 0:
+        printf("玩家：钱夫人");
+        break;
+    case 1:
+        printf("玩家：阿土伯");
+        break;
+    case 2:
+        printf("玩家：孙小美");
+        break;
+    case 3:
+        printf("玩家：金贝贝");
+        break;
+    default:
+        break;
+    }
+    printf("  机器人---路障---金钱---点数\n", cur_p->PlayerId, names[cur_p->PlayerId]);
     _CUR_DOWN
-    printf("                %d      %d     %d      %d      %d\n", cur_p->RobotNum, cur_p->BlockNum, cur_p->BombNum, cur_p->Money, cur_p->Point);
+    printf("                %d      %d      %d      %d\n", cur_p->RobotNum, cur_p->BlockNum, cur_p->Money, cur_p->Point);
+     _CUR_DOWN
+    if(p != NULL){
+        printf("您的房产位置：\t");
+        while(p != NULL){
+            printf("%d\t",p->houseID);
+            p = p->next;
+        }
+        printf("\n对应的等级：\t");
+        p = cur_p->HouseId;
+        while(p != NULL){
+            printf("%d\t",(game.map[p->houseID]).HouseLevel);
+            p = p->next;
+        }
+        printf("\n");
+    }
+    else{
+        printf("您目前还没有房产.\n");
+    }
     _WHITE
 }
