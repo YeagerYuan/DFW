@@ -100,11 +100,11 @@ void _printBlock(MAPBLOCK block)
                 break;
             case 0:
                 levelBuf[0] = '0' + block.HouseLevel;
-                printOfColor(levelBuf, GREEN);
+                printOfColor(levelBuf, RED);
                 break;
             case 1:
                 levelBuf[0] = '0' + block.HouseLevel;
-                printOfColor(levelBuf, RED);
+                printOfColor(levelBuf, GREEN);
                 break;
             case 2:
                 levelBuf[0] = '0' + block.HouseLevel;

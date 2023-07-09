@@ -11,7 +11,9 @@ extern GAME game;
 *增加了判断是否是测试用的set命令
 */
 int getInput(int* num) {
-    printf("输入命令>>>");
+    //printf("I am right 3\n");
+    //getchar();
+    printf("请输入>>>");
     char inputString[BUF_SIZE] = { '\0' };
     char inputStringTest[BUF_SIZE] = { '\0' };
     char command[BUF_SIZE / 2] = { '\0' };
@@ -21,6 +23,8 @@ int getInput(int* num) {
     //int num = 0;
     char* ptr;
     _getString(inputString);
+    //printf("I am right 0\n");
+    //getchar();
     strcpy(inputStringTest, inputString);
     buf_1 = strtok(inputStringTest, " ");
     if (strcmp(buf_1, "set")) {
@@ -101,50 +105,63 @@ int getInput(int* num) {
         }
     }
     else {
+        //printf("I am right 1\n");
+        //getchar();
+        puts(inputString);
         buf_2 = strtok(inputString, " ");
         if (!strcmp(buf_2, "set")) {
             buf_2 = strtok(NULL, " ");
             if (!strcmp(buf_2, "money")) {
                 buf_2 = strtok(NULL, " ");
                 if (!strcmp(buf_2, "Q")) {
+                    buf_2 = strtok(NULL, " ");
                     int inputNumber = (int)strtol(buf_2, '\0', 0);
                     *num = inputNumber;
                     return 100;
                 }
                 else if (!strcmp(buf_2, "A")) {
+                    buf_2 = strtok(NULL, " ");
                     int inputNumber = (int)strtol(buf_2, '\0', 0);
                     *num = inputNumber;
                     return 101;
                 }
                 else if (!strcmp(buf_2, "S")) {
+                    buf_2 = strtok(NULL, " ");
                     int inputNumber = (int)strtol(buf_2, '\0', 0);
                     *num = inputNumber;
                     return 102;
                 }
                 else if (!strcmp(buf_2, "J")) {
+                    buf_2 = strtok(NULL, " ");
                     int inputNumber = (int)strtol(buf_2, '\0', 0);
                     *num = inputNumber;
                     return 103;
                 }
             }
             else if (!strcmp(buf_2, "point")) {
+                //printf("I am right 4\n");
+                //getchar();
                 buf_2 = strtok(NULL, " ");
                 if (!strcmp(buf_2, "Q")) {
+                    buf_2 = strtok(NULL, " ");
                     int inputNumber = (int)strtol(buf_2, '\0', 0);
                     *num = inputNumber;
                     return 200;
                 }
                 else if (!strcmp(buf_2, "A")) {
+                    buf_2 = strtok(NULL, " ");
                     int inputNumber = (int)strtol(buf_2, '\0', 0);
                     *num = inputNumber;
                     return 201;
                 }
                 else if (!strcmp(buf_2, "S")) {
+                    buf_2 = strtok(NULL, " ");
                     int inputNumber = (int)strtol(buf_2, '\0', 0);
                     *num = inputNumber;
                     return 202;
                 }
                 else if (!strcmp(buf_2, "J")) {
+                    buf_2 = strtok(NULL, " ");
                     int inputNumber = (int)strtol(buf_2, '\0', 0);
                     *num = inputNumber;
                     return 203;
@@ -153,21 +170,25 @@ int getInput(int* num) {
             else if (!strcmp(buf_2, "buff")) {
                 buf_2 = strtok(NULL, " ");
                 if (!strcmp(buf_2, "Q")) {
+                    buf_2 = strtok(NULL, " ");
                     int inputNumber = (int)strtol(buf_2, '\0', 0);
                     *num = inputNumber;
                     return 300;
                 }
                 else if (!strcmp(buf_2, "A")) {
+                    buf_2 = strtok(NULL, " ");
                     int inputNumber = (int)strtol(buf_2, '\0', 0);
                     *num = inputNumber;
                     return 301;
                 }
                 else if (!strcmp(buf_2, "S")) {
+                    buf_2 = strtok(NULL, " ");
                     int inputNumber = (int)strtol(buf_2, '\0', 0);
                     *num = inputNumber;
                     return 302;
                 }
                 else if (!strcmp(buf_2, "J")) {
+                    buf_2 = strtok(NULL, " ");
                     int inputNumber = (int)strtol(buf_2, '\0', 0);
                     *num = inputNumber;
                     return 303;
@@ -179,7 +200,6 @@ int getInput(int* num) {
         return -1;
     }
 }
-
 
 
 char* _stringNormalize(char* ptr){
@@ -254,7 +274,8 @@ int getNumberInput_1_123(OP *o) {
             gets(input_buf);
         }
         else {
-            input_buf[0] = o->num[0];// 替代性判断
+
+            input_buf[0] = o->num[0]+'0';// 替代性判断
         }
         if(strlen(input_buf) != 1) {
             printf("放弃机会！\n");

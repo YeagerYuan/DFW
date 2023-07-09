@@ -3,7 +3,7 @@ preuser A
 Q
 alive 1
 money 40000
-point 0
+point 114
 item1 0
 item2 0
 item3 0

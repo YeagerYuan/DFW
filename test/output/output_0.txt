@@ -1,5 +1,5 @@
 user QA
-preuser Q
+preuser A
 Q
 alive 1
 money 40000

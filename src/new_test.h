@@ -30,6 +30,7 @@ typedef enum COMMAND_
     yESORNO, // yes or no
     nUM,     // 一个单独的num
     qUIT,
+    qUITITEMSHOP,
 } COMMAND;
 
 // 指令的所有内容(类型、参数)
@@ -47,3 +48,4 @@ void commandExplain(OP* command_state);
 void preSet();
 void afterAction();
 int openFile(int num);
+int isDigitStr(char* str);

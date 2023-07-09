@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
+#include <ctype.h>
 #include "judge.h"
 #include "base.h"
 #include "new_test.h"
@@ -342,7 +343,7 @@ void afterAction()
                 // 购买完成，更新状态
                 currentBlock->HouseOwnerId = cur_p->PlayerId;
                 currentBlock->HouseLevel++;
-                currentBlock->rentAmount = currentCost * 2;
+                currentBlock->rentAmount = currentCost / 2;
                 cur_p->Money -= currentCost;
                 // 把该空地加入该玩家名下房产
                 LOCATION* p = (LOCATION*)malloc(sizeof(LOCATION));
@@ -405,17 +406,29 @@ void afterAction()
         enterMagicHouse(cur_p, NULL);
         break;
     case PROPHOUSE:
+        // 屎山
+        if (cur_p->Money < ROBOT_POINTS) {
+            break;
+        }
         getCommand(cur_op);
-        while (cur_op->num[0] != -1)
+        while (cur_op->command != qUITITEMSHOP)
         {
-            // TODO 添加异常二级命令处理：如 step 2 会被视为正常输入
-            enterItemShop(cur_p, cur_op);
+            if (cur_op->command == nUM) {
+                enterItemShop(cur_p, cur_op);
+            }
+            // 由enterITEMSHOP赋予
+            if (cur_op->command == qUITITEMSHOP) {
+                break;
+            }
             getCommand(cur_op);
+            // TODO 添加异常二级命令处理：如 step 2 会被视为正常输入
         }
         break;
     case GIFTHOUSE:
         getCommand(cur_op);
-        enterGiftShop(cur_p, cur_op);
+        if (cur_op->command == nUM) {
+            enterGiftShop(cur_p, cur_op);
+        }
         break;
     case JAIL:
         // printf("您进入监狱，将被跳过两轮！\n");
@@ -885,8 +898,16 @@ void commandExplain(OP* command_state)
         // quit
         else if (!strcmp(buf, "quit"))
         {
-            assert(!strcmp(buf, "quit"));
-            command_state->command = qUIT;
+        assert(!strcmp(buf, "quit"));
+        command_state->command = qUIT;
+        }
+        else if (isDigitStr(buf)) {
+        command_state->command = nUM;
+        command_state->num[0] = atoi(buf);
+        }
+        else if (!strcmp(buf, "F"))
+        {
+        command_state->command = qUITITEMSHOP;
         }
         else
         {
@@ -895,6 +916,19 @@ void commandExplain(OP* command_state)
     }
     return;
 }
+
+int isDigitStr(char* str) {
+    int len = strlen(str);
+    int i = 0;
+
+    for (i = 0; i < len; i++)
+    {
+        if (!(isdigit(str[i])))
+            return 0;
+    }
+    return 1;
+}
+
 
 /* get game state & print into file */
 void Dump(int j) {

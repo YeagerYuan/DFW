@@ -935,13 +935,17 @@ void payRent(PLAYER *from, PLAYER *to, int amount)
     to->Money += amount;
 }
 
-void enterItemShop(PLAYER *cur_p, OP *op)
+void enterItemShop(PLAYER* cur_p, OP* op)
 {
+    if (op != NULL && op->command == qUITITEMSHOP) {
+        return;
+    }
     int sig = 0;
     // 当调用函数就说明已经进入了道具屋，需要进行购买等操作，并且进行是否能够购买的判定
     if (cur_p->Point < ROBOT_POINTS)
     {
         printf("你的点数不足以购买道具！\n");
+        op->command = qUITITEMSHOP;
         return;
     }
     else
@@ -959,12 +963,14 @@ void enterItemShop(PLAYER *cur_p, OP *op)
             printf("你的点数不足以再购买道具，退出\n");
             return;
         }
-        if(op == NULL) {
+        if (op == NULL) {
             item_num = getNumberInput_1();
         }
         else {
             item_num = op->num[0];
         }
+
+
         if (item_num == 70 || item_num == -1)
         {
             // 70表示F
@@ -974,7 +980,12 @@ void enterItemShop(PLAYER *cur_p, OP *op)
         else
         {
             sig = buyItem(cur_p, item_num);
-            if(sig == -1) {
+            if (sig == -1) {
+                break;
+            }
+
+            if (op != NULL && sig == 0) {
+                op->command = qUITITEMSHOP;
                 break;
             }
         }
@@ -982,9 +993,10 @@ void enterItemShop(PLAYER *cur_p, OP *op)
     return;
 }
 
-int buyItem(PLAYER *cur_p, int item_num) {
+
+int buyItem(PLAYER* cur_p, int item_num) {
     if (cur_p->BlockNum + cur_p->BombNum + cur_p->RobotNum < 10)
-        {
+    {
         if (item_num == 1)
         {
             if (cur_p->Point >= BLOCK_POINTS)
@@ -993,6 +1005,7 @@ int buyItem(PLAYER *cur_p, int item_num) {
                 cur_p->BlockNum++;
                 cur_p->Point -= BLOCK_POINTS;
             }
+            return -1;
         }
         else if (item_num == 2)
         {
@@ -1002,6 +1015,7 @@ int buyItem(PLAYER *cur_p, int item_num) {
                 cur_p->RobotNum++;
                 cur_p->Point -= ROBOT_POINTS;
             }
+            return -1;
         }
         else if (item_num == 3)
         {
@@ -1011,6 +1025,7 @@ int buyItem(PLAYER *cur_p, int item_num) {
                 cur_p->BombNum++;
                 cur_p->Point -= BOMB_POINTS;
             }
+            return -1;
         }
         else
         {
